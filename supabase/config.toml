@@ -1,0 +1,4 @@
+project_id = "zaujdnwzngtcnfektfgj"
+
+[functions.aemet-weather]
+verify_jwt = false
