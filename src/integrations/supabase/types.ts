@@ -14,6 +14,62 @@ export type Database = {
   }
   public: {
     Tables: {
+      favorite_spots: {
+        Row: {
+          created_at: string
+          id: string
+          spot_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          spot_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          spot_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_spots_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "surf_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       surf_spots: {
         Row: {
           created_at: string

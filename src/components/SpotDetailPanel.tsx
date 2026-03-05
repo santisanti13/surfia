@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { X, Waves, Wind, Thermometer, Sun, Droplets, MapPin, Navigation, Loader2, AlertTriangle } from "lucide-react";
+import { X, Waves, Wind, Thermometer, Sun, MapPin, Navigation, Loader2, AlertTriangle, Heart, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 interface SurfSpot {
   id: string;
@@ -66,9 +69,31 @@ function getScoreLabel(score: number): string {
 }
 
 const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPanelProps) => {
+  const { user } = useAuth();
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [usingMock, setUsingMock] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  // Check favorite status
+  useEffect(() => {
+    if (!user) return;
+    supabase.from("favorite_spots").select("id").eq("user_id", user.id).eq("spot_id", spot.id).maybeSingle()
+      .then(({ data }) => setIsFavorite(!!data));
+  }, [user, spot.id]);
+
+  const toggleFavorite = async () => {
+    if (!user) { toast.error("Inicia sesión para guardar favoritos"); return; }
+    if (isFavorite) {
+      await supabase.from("favorite_spots").delete().eq("user_id", user.id).eq("spot_id", spot.id);
+      setIsFavorite(false);
+      toast.success("Eliminado de favoritos");
+    } else {
+      await supabase.from("favorite_spots").insert({ user_id: user.id, spot_id: spot.id });
+      setIsFavorite(true);
+      toast.success("¡Añadido a favoritos!");
+    }
+  };
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -112,12 +137,20 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        <div className="absolute top-4 right-4 flex gap-2">
+          <button
+            onClick={toggleFavorite}
+            className="w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors"
+          >
+            <Heart className={`h-4 w-4 ${isFavorite ? "fill-destructive text-destructive" : ""}`} />
+          </button>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
         <div className="absolute bottom-4 left-4">
           <h3 className="text-2xl font-display">{spot.name}</h3>
           <p className="text-sm text-muted-foreground font-body flex items-center gap-1">
@@ -214,19 +247,27 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
               </div>
             </div>
 
-            {/* Navigation button */}
-            {userPos && (
-              <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="hero" className="w-full rounded-xl">
-                  <Navigation className="h-4 w-4 mr-2" />
-                  Cómo llegar
+            {/* Action buttons */}
+            <div className="space-y-2">
+              {userPos && (
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button variant="hero" className="w-full rounded-xl">
+                    <Navigation className="h-4 w-4 mr-2" />
+                    Cómo llegar
+                  </Button>
+                </a>
+              )}
+              <Link to="/alerts">
+                <Button variant="outline" className="w-full rounded-xl mt-2">
+                  <Bell className="h-4 w-4 mr-2" />
+                  Crear alerta para este spot
                 </Button>
-              </a>
-            )}
+              </Link>
+            </div>
           </>
         ) : null}
       </div>
