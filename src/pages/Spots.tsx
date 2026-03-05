@@ -19,8 +19,8 @@ L.Icon.Default.mergeOptions({
 
 const surfIcon = new L.DivIcon({
   className: "custom-surf-marker",
-  html: `<div style="background: hsl(185, 72%, 48%); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid hsl(200, 20%, 6%); box-shadow: 0 0 20px hsl(185, 72%, 48%, 0.5);">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="hsl(200, 20%, 6%)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  html: `<div style="background: hsl(185, 72%, 42%); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
       <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
       <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
@@ -32,7 +32,7 @@ const surfIcon = new L.DivIcon({
 
 const userIcon = new L.DivIcon({
   className: "custom-user-marker",
-  html: `<div style="background: hsl(35, 90%, 55%); width: 20px; height: 20px; border-radius: 50%; border: 3px solid hsl(200, 20%, 6%); box-shadow: 0 0 15px hsl(35, 90%, 55%, 0.6);"></div>`,
+  html: `<div style="background: hsl(35, 90%, 55%); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>`,
   iconSize: [20, 20],
   iconAnchor: [10, 10],
 });
@@ -113,12 +113,12 @@ const Spots = () => {
               center={defaultCenter}
               zoom={userPos ? 10 : 6}
               className="h-full w-full z-0"
-              style={{ background: "hsl(200, 20%, 6%)" }}
+              style={{ background: "#f0f4f8" }}
               zoomControl={false}
             >
               <TileLayer
                 attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
               />
               <FlyToUser position={userPos} />
 
