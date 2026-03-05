@@ -1,16 +1,17 @@
-import { Waves } from "lucide-react";
+import { Waves, Bell, User, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { label: "Spots", href: "/spots" },
-  { label: "Forecast", href: "#" },
-  { label: "Community", href: "#" },
-  { label: "Journal", href: "#" },
+  { label: "Alertas", href: "/alerts" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -39,6 +40,26 @@ const Navbar = () => {
               {link.label}
             </Link>
           ))}
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="text-xs text-muted-foreground font-body truncate max-w-[120px]">
+                {user.email}
+              </span>
+              <button
+                onClick={signOut}
+                className="text-foreground/70 hover:text-primary transition-colors"
+                title="Cerrar sesión"
+              >
+                <LogOut className="h-4 w-4" />
+              </button>
+            </div>
+          ) : (
+            <Link to="/auth">
+              <Button variant="hero" size="sm" className="rounded-full">
+                <User className="h-4 w-4 mr-1" /> Entrar
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </nav>
