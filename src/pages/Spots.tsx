@@ -1,41 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { useState, useEffect, useRef, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, Waves, Wind, Thermometer, Navigation, AlertTriangle, Loader2, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Navigation, Loader2 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import SpotDetailPanel from "@/components/SpotDetailPanel";
-
-// Fix Leaflet default marker icon
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
-  iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-});
-
-const surfIcon = new L.DivIcon({
-  className: "custom-surf-marker",
-  html: `<div style="background: hsl(185, 72%, 42%); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-      <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-      <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
-    </svg>
-  </div>`,
-  iconSize: [32, 32],
-  iconAnchor: [16, 16],
-});
-
-const userIcon = new L.DivIcon({
-  className: "custom-user-marker",
-  html: `<div style="background: hsl(35, 90%, 55%); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>`,
-  iconSize: [20, 20],
-  iconAnchor: [10, 10],
-});
 
 interface SurfSpot {
   id: string;
@@ -47,16 +17,6 @@ interface SurfSpot {
   wave_type: string | null;
   difficulty: string | null;
   image_url: string | null;
-}
-
-function FlyToUser({ position }: { position: [number, number] | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (position) {
-      map.flyTo(position, 10, { duration: 2 });
-    }
-  }, [position, map]);
-  return null;
 }
 
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -73,7 +33,11 @@ const Spots = () => {
   const [selectedSpot, setSelectedSpot] = useState<SurfSpot | null>(null);
   const [loading, setLoading] = useState(true);
   const [geoError, setGeoError] = useState<string | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const markersRef = useRef<L.Marker[]>([]);
 
+  // Fetch spots
   useEffect(() => {
     const fetchSpots = async () => {
       const { data } = await supabase.from("surf_spots").select("*");
@@ -83,21 +47,115 @@ const Spots = () => {
     fetchSpots();
   }, []);
 
+  // Geolocation
   useEffect(() => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (pos) => setUserPos([pos.coords.latitude, pos.coords.longitude]),
-        (err) => setGeoError("Activa la geolocalización para ver spots cercanos"),
+        () => setGeoError("Activa la geolocalización para ver spots cercanos"),
         { enableHighAccuracy: true, timeout: 10000 }
       );
+    }
+  }, []);
+
+  // Initialize map
+  useEffect(() => {
+    if (loading || !mapContainerRef.current || mapRef.current) return;
+
+    const center: [number, number] = userPos || [40.4168, -3.7038];
+    const zoom = userPos ? 10 : 6;
+
+    const map = L.map(mapContainerRef.current, {
+      center,
+      zoom,
+      zoomControl: false,
+    });
+
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+    }).addTo(map);
+
+    L.control.zoom({ position: "bottomright" }).addTo(map);
+
+    mapRef.current = map;
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, [loading]);
+
+  // Fly to user when position available
+  useEffect(() => {
+    if (mapRef.current && userPos) {
+      mapRef.current.flyTo(userPos, 10, { duration: 2 });
+
+      // Add user marker
+      const userIcon = L.divIcon({
+        className: "custom-user-marker",
+        html: `<div style="background: hsl(35, 90%, 55%); width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"></div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10],
+      });
+
+      L.marker(userPos, { icon: userIcon })
+        .addTo(mapRef.current)
+        .bindPopup("<span style='font-family: Inter, sans-serif; font-size: 13px;'>📍 Tu ubicación</span>");
+    }
+  }, [userPos]);
+
+  // Add spot markers
+  useEffect(() => {
+    if (!mapRef.current || spots.length === 0) return;
+
+    // Clear old markers
+    markersRef.current.forEach((m) => m.remove());
+    markersRef.current = [];
+
+    const surfIcon = L.divIcon({
+      className: "custom-surf-marker",
+      html: `<div style="background: hsl(185, 72%, 42%); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.2); cursor: pointer;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+          <path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+          <path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/>
+        </svg>
+      </div>`,
+      iconSize: [32, 32],
+      iconAnchor: [16, 16],
+    });
+
+    spots.forEach((spot) => {
+      const marker = L.marker([spot.lat, spot.lng], { icon: surfIcon })
+        .addTo(mapRef.current!)
+        .on("click", () => setSelectedSpot(spot));
+
+      const distText = userPos
+        ? `<br/><span style="color: hsl(185, 72%, 42%); font-size: 11px;">${getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km</span>`
+        : "";
+
+      marker.bindPopup(
+        `<div style="font-family: Inter, sans-serif;">
+          <b style="font-size: 13px;">${spot.name}</b><br/>
+          <span style="font-size: 11px; opacity: 0.7;">${spot.location}</span>
+          ${distText}
+        </div>`
+      );
+
+      markersRef.current.push(marker);
+    });
+  }, [spots, userPos]);
+
+  const handleSpotClick = useCallback((spot: SurfSpot) => {
+    setSelectedSpot(spot);
+    if (mapRef.current) {
+      mapRef.current.flyTo([spot.lat, spot.lng], 12, { duration: 1 });
     }
   }, []);
 
   const sortedSpots = userPos
     ? [...spots].sort((a, b) => getDistance(userPos[0], userPos[1], a.lat, a.lng) - getDistance(userPos[0], userPos[1], b.lat, b.lng))
     : spots;
-
-  const defaultCenter: [number, number] = userPos || [40.4168, -3.7038]; // Madrid default
 
   return (
     <div className="h-screen w-screen bg-background flex flex-col">
@@ -109,48 +167,7 @@ const Spots = () => {
           </div>
         ) : (
           <>
-            <MapContainer
-              center={defaultCenter}
-              zoom={userPos ? 10 : 6}
-              className="h-full w-full z-0"
-              style={{ background: "#f0f4f8" }}
-              zoomControl={false}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-                url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-              />
-              <FlyToUser position={userPos} />
-
-              {userPos && (
-                <Marker position={userPos} icon={userIcon}>
-                  <Popup className="dark-popup">
-                    <span className="font-body text-sm">📍 Tu ubicación</span>
-                  </Popup>
-                </Marker>
-              )}
-
-              {spots.map((spot) => (
-                <Marker
-                  key={spot.id}
-                  position={[spot.lat, spot.lng]}
-                  icon={surfIcon}
-                  eventHandlers={{ click: () => setSelectedSpot(spot) }}
-                >
-                  <Popup className="dark-popup">
-                    <div className="font-body">
-                      <p className="font-semibold text-sm">{spot.name}</p>
-                      <p className="text-xs opacity-70">{spot.location}</p>
-                      {userPos && (
-                        <p className="text-xs mt-1 text-primary">
-                          {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
-                        </p>
-                      )}
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
+            <div ref={mapContainerRef} className="h-full w-full z-0" style={{ background: "#f0f4f8" }} />
 
             {/* Spots sidebar */}
             <div className="absolute top-0 left-0 h-full w-80 bg-background/90 backdrop-blur-xl border-r border-border/50 overflow-y-auto z-[1000] hidden md:block">
@@ -169,11 +186,11 @@ const Spots = () => {
                   {sortedSpots.map((spot) => (
                     <button
                       key={spot.id}
-                      onClick={() => setSelectedSpot(spot)}
+                      onClick={() => handleSpotClick(spot)}
                       className={`w-full text-left p-3 rounded-xl transition-all duration-300 ${
                         selectedSpot?.id === spot.id
-                          ? "bg-primary/20 border border-primary/50"
-                          : "bg-card/40 border border-transparent hover:bg-card/80"
+                          ? "bg-primary/10 border border-primary/30"
+                          : "bg-card border border-transparent hover:bg-muted"
                       }`}
                     >
                       <div className="flex justify-between items-start">
@@ -190,10 +207,10 @@ const Spots = () => {
                         )}
                       </div>
                       <div className="flex gap-2 mt-2">
-                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded font-body">
-                          {spot.wave_type?.replace("_", " ")}
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary px-2 py-0.5 rounded font-body">
+                          {spot.wave_type?.replace(/_/g, " ")}
                         </span>
-                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary/50 px-2 py-0.5 rounded font-body">
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary px-2 py-0.5 rounded font-body">
                           {spot.difficulty}
                         </span>
                       </div>
