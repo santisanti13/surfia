@@ -1,4 +1,5 @@
 import { Waves, Wind, Thermometer, ArrowRight, MapPin, ChevronDown, Compass, BarChart3, Radio } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion, type Easing } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -89,9 +90,11 @@ const Index = () => {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mt-8"
           >
-            <Button variant="hero" size="lg" className="rounded-full px-10 py-6 text-base">
-              Find Waves <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <Link to="/spots">
+              <Button variant="hero" size="lg" className="rounded-full px-10 py-6 text-base">
+                Find Waves <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
 
