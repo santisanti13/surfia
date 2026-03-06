@@ -72,8 +72,8 @@ const Index = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-[8rem] md:text-[12rem] leading-none tracking-tight"
-            style={{ fontFamily: "var(--font-hero)", color: "hsl(var(--hero-title))" }}
+            className="text-[8rem] md:text-[12rem] leading-none font-display tracking-tight"
+            style={{ color: "hsl(var(--hero-title))" }}
           >
             SURFIA
           </motion.h1>
