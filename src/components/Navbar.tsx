@@ -27,7 +27,7 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <Waves className="h-6 w-6 text-primary" />
+          
           <span className="font-display text-2xl tracking-wide">SURFIA</span>
         </Link>
         <div className="hidden md:flex items-center gap-8">
