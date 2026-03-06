@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Boogaloo&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css');
 
 @tailwind base;
@@ -45,7 +45,10 @@
     --coral: 15 80% 55%;
 
     --font-display: 'Bebas Neue', sans-serif;
+    --font-hero: 'Boogaloo', cursive;
     --font-body: 'Inter', sans-serif;
+
+    --hero-title: 45 95% 55%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
