@@ -82,7 +82,7 @@ const Index = () => {
             transition={{ delay: 0.4, duration: 0.6 }}
             className="text-lg md:text-xl text-foreground/80 max-w-xl mx-auto mt-4 font-body font-light"
           >
-            Discover the world's best waves. Real-time forecasts, local insights, and a global community of riders.
+            Previsión de olas en tiempo real cerca de ti. Consulta oleaje, viento y marejada en los mejores spots de surf.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
