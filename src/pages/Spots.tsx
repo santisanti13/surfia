@@ -2,10 +2,13 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "@/integrations/supabase/client";
-import { MapPin, Navigation, Loader2 } from "lucide-react";
+import { MapPin, Navigation, Loader2, Plus } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import SpotDetailPanel from "@/components/SpotDetailPanel";
+import SuggestSpotForm from "@/components/SuggestSpotForm";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 interface SurfSpot {
   id: string;
@@ -28,9 +31,11 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number): nu
 }
 
 const Spots = () => {
+  const { user } = useAuth();
   const [spots, setSpots] = useState<SurfSpot[]>([]);
   const [userPos, setUserPos] = useState<[number, number] | null>(null);
   const [selectedSpot, setSelectedSpot] = useState<SurfSpot | null>(null);
+  const [showSuggestForm, setShowSuggestForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [geoError, setGeoError] = useState<string | null>(null);
   const mapRef = useRef<L.Map | null>(null);
@@ -38,14 +43,15 @@ const Spots = () => {
   const markersRef = useRef<L.Marker[]>([]);
 
   // Fetch spots
-  useEffect(() => {
-    const fetchSpots = async () => {
-      const { data } = await supabase.from("surf_spots").select("*");
-      if (data) setSpots(data);
-      setLoading(false);
-    };
-    fetchSpots();
+  const fetchSpots = useCallback(async () => {
+    const { data } = await supabase.from("surf_spots").select("*");
+    if (data) setSpots(data);
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchSpots();
+  }, [fetchSpots]);
 
   // Geolocation
   useEffect(() => {
@@ -219,6 +225,28 @@ const Spots = () => {
                 </div>
               </div>
             </div>
+
+            {/* Suggest spot button */}
+            {user && (
+              <Button
+                onClick={() => setShowSuggestForm(true)}
+                className="absolute bottom-4 right-4 z-[1000] rounded-full shadow-lg"
+                size="lg"
+              >
+                <Plus className="h-5 w-5 mr-2" />
+                Sugerir Spot
+              </Button>
+            )}
+
+            {/* Suggest spot form */}
+            <AnimatePresence>
+              {showSuggestForm && (
+                <SuggestSpotForm
+                  onClose={() => setShowSuggestForm(false)}
+                  onSubmitted={fetchSpots}
+                />
+              )}
+            </AnimatePresence>
 
             {/* Detail panel */}
             <AnimatePresence>

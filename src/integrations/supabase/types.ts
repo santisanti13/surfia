@@ -72,6 +72,7 @@ export type Database = {
       }
       surf_spots: {
         Row: {
+          approved: boolean
           created_at: string
           difficulty: string | null
           id: string
@@ -81,9 +82,12 @@ export type Database = {
           location: string
           name: string
           playa_id_aemet: string | null
+          source: string
+          submitted_by: string | null
           wave_type: string | null
         }
         Insert: {
+          approved?: boolean
           created_at?: string
           difficulty?: string | null
           id?: string
@@ -93,9 +97,12 @@ export type Database = {
           location: string
           name: string
           playa_id_aemet?: string | null
+          source?: string
+          submitted_by?: string | null
           wave_type?: string | null
         }
         Update: {
+          approved?: boolean
           created_at?: string
           difficulty?: string | null
           id?: string
@@ -105,6 +112,8 @@ export type Database = {
           location?: string
           name?: string
           playa_id_aemet?: string | null
+          source?: string
+          submitted_by?: string | null
           wave_type?: string | null
         }
         Relationships: []
