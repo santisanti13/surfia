@@ -1,7 +1,9 @@
 project_id = "zaujdnwzngtcnfektfgj"
 
-[functions.aemet-weather]
-verify_jwt = false
-
-[functions.populate-surf-spots]
-verify_jwt = false
+[functions]
+  [functions.aemet-weather]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.populate-surf-spots]
+    verify_jwt = false
