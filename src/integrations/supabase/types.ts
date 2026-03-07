@@ -70,6 +70,76 @@ export type Database = {
         }
         Relationships: []
       }
+      spot_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          photo_url: string
+          spot_id: string
+          user_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          photo_url: string
+          spot_id: string
+          user_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          photo_url?: string
+          spot_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spot_photos_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "surf_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      spot_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          id: string
+          rating: number
+          spot_id: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          spot_id: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          spot_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spot_reviews_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "surf_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       surf_spots: {
         Row: {
           approved: boolean
