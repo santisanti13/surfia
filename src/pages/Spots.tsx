@@ -235,8 +235,6 @@ const Spots = () => {
           <>
             <div ref={mapContainerRef} className="h-full w-full z-0" style={{ background: "#f0f4f8" }} />
 
-            {/* Heat map overlay */}
-            <HeatMapOverlay map={mapRef.current} spots={filteredSpots} visible={showHeatMap} />
 
             {/* Desktop sidebar */}
             <SpotListSidebar
