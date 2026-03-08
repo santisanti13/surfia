@@ -9,3 +9,5 @@ project_id = "zaujdnwzngtcnfektfgj"
     verify_jwt = false
   [functions.populate-surf-spots]
     verify_jwt = false
+  [functions.validate-aemet-ids]
+    verify_jwt = false
