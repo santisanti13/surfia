@@ -5,7 +5,7 @@ import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Flame } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import SpotDetailPanel from "@/components/SpotDetailPanel";
@@ -13,7 +13,7 @@ import SuggestSpotForm from "@/components/SuggestSpotForm";
 import SpotListSidebar from "@/components/spots/SpotListSidebar";
 import SpotBottomSheet from "@/components/spots/SpotBottomSheet";
 import MapLayerControl, { type LayerType } from "@/components/spots/MapLayerControl";
-import HeatMapOverlay from "@/components/spots/HeatMapOverlay";
+
 import { type SpotFilters, emptyFilters } from "@/components/spots/SpotFiltersBar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -76,7 +76,7 @@ const Spots = () => {
   const [loading, setLoading] = useState(true);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<LayerType>("streets");
-  const [showHeatMap, setShowHeatMap] = useState(false);
+  
   const [filters, setFilters] = useState<SpotFilters>(emptyFilters);
   const [searchQuery, setSearchQuery] = useState("");
   const mapRef = useRef<L.Map | null>(null);
@@ -235,8 +235,6 @@ const Spots = () => {
           <>
             <div ref={mapContainerRef} className="h-full w-full z-0" style={{ background: "#f0f4f8" }} />
 
-            {/* Heat map overlay */}
-            <HeatMapOverlay map={mapRef.current} spots={filteredSpots} visible={showHeatMap} />
 
             {/* Desktop sidebar */}
             <SpotListSidebar
@@ -272,8 +270,8 @@ const Spots = () => {
               <MapLayerControl activeLayer={activeLayer} onLayerChange={setActiveLayer} />
             </div>
 
-            {/* Mobile layer + heat controls */}
-            <div className="absolute top-3 right-3 z-[1000] flex gap-2 md:hidden">
+            {/* Mobile layer control */}
+            <div className="absolute top-3 right-3 z-[1000] md:hidden">
               <button
                 onClick={() => setActiveLayer(activeLayer === "streets" ? "satellite" : activeLayer === "satellite" ? "terrain" : "streets")}
                 className="w-9 h-9 rounded-xl bg-background/90 backdrop-blur-xl border border-border/50 shadow-lg flex items-center justify-center"
@@ -281,29 +279,6 @@ const Spots = () => {
                 <span className="text-xs font-body font-bold text-muted-foreground">
                   {activeLayer === "streets" ? "🗺️" : activeLayer === "satellite" ? "🛰️" : "⛰️"}
                 </span>
-              </button>
-              <button
-                onClick={() => setShowHeatMap(!showHeatMap)}
-                className={`w-9 h-9 rounded-xl backdrop-blur-xl border shadow-lg flex items-center justify-center transition-colors ${
-                  showHeatMap ? "bg-primary text-primary-foreground border-primary" : "bg-background/90 border-border/50"
-                }`}
-              >
-                <Flame className="h-4 w-4" />
-              </button>
-            </div>
-
-            {/* Desktop heat map toggle */}
-            <div className="hidden md:block absolute top-[180px] right-4 z-[1000]">
-              <button
-                onClick={() => setShowHeatMap(!showHeatMap)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl backdrop-blur-xl border shadow-lg text-xs font-body font-medium transition-all ${
-                  showHeatMap
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background/90 border-border/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-                }`}
-              >
-                <Flame className="h-3.5 w-3.5" />
-                <span className="hidden lg:inline">Mapa calor</span>
               </button>
             </div>
 
