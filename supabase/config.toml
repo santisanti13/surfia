@@ -11,3 +11,5 @@ project_id = "zaujdnwzngtcnfektfgj"
     verify_jwt = false
   [functions.validate-aemet-ids]
     verify_jwt = false
+  [functions.search-aemet-beaches]
+    verify_jwt = false
