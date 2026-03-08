@@ -163,12 +163,12 @@ const Index = () => {
             variants={fadeUp}
             custom={0}
           >
-            <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Precision</span>
+            <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Precisión</span>
             <h2 className="text-5xl md:text-7xl font-display tracking-tight mt-2 mb-6">
-              Forecasting
+              Previsión
             </h2>
             <p className="text-muted-foreground font-body leading-relaxed text-lg mb-8">
-              Our proprietary swell models combine global buoy data with local bathymetry to give you the most accurate wave predictions on the planet.
+              Nuestros modelos combinan datos de boyas y batimetría local para ofrecerte las predicciones de olas más precisas.
             </p>
             <div className="space-y-4">
               {features.map((f, i) => (
@@ -188,6 +188,20 @@ const Index = () => {
                 </motion.div>
               ))}
             </div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              custom={4}
+              className="mt-8"
+            >
+              <Link to="/spots">
+                <Button variant="hero" size="lg" className="rounded-full px-8 py-5">
+                  Ver Previsiones <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
 
           <motion.div
