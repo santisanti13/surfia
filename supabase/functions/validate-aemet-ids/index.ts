@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
 
       // Add delay between requests to respect rate limits
       if (results.length > 0) {
-        await new Promise((r) => setTimeout(r, 1200));
+        await new Promise((r) => setTimeout(r, 800));
       }
 
       try {
