@@ -37,9 +37,9 @@ const spots = [
 ];
 
 const features = [
-  { icon: BarChart3, title: "16-day long range forecasts" },
-  { icon: Compass, title: "High-resolution nearshore modeling" },
-  { icon: Radio, title: "Live wind and tide updates" },
+  { icon: BarChart3, title: "Previsiones a 16 días" },
+  { icon: Compass, title: "Modelado costero de alta resolución" },
+  { icon: Radio, title: "Viento y mareas en tiempo real" },
 ];
 
 const fadeUp = {
