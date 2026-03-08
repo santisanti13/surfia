@@ -1,4 +1,4 @@
-import { MapPin, Navigation } from "lucide-react";
+import { MapPin, Navigation, Search, X } from "lucide-react";
 import SpotFiltersBar, { type SpotFilters } from "./SpotFiltersBar";
 
 interface SurfSpot {
@@ -23,6 +23,8 @@ interface SpotListSidebarProps {
   onSpotClick: (spot: SurfSpot) => void;
   filters: SpotFilters;
   onFiltersChange: (filters: SpotFilters) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 const getDifficultyColor = (difficulty: string | null) => {
@@ -34,7 +36,7 @@ const getDifficultyColor = (difficulty: string | null) => {
   }
 };
 
-const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoError, getDistance, onSpotClick, filters, onFiltersChange }: SpotListSidebarProps) => {
+const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoError, getDistance, onSpotClick, filters, onFiltersChange, searchQuery, onSearchChange }: SpotListSidebarProps) => {
   const sortedSpots = userPos
     ? [...spots].sort((a, b) => getDistance(userPos[0], userPos[1], a.lat, a.lng) - getDistance(userPos[0], userPos[1], b.lat, b.lng))
     : spots;
@@ -55,6 +57,26 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
             {geoError}
           </div>
         )}
+
+        {/* Search */}
+        <div className="relative mb-3">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Buscar por nombre o ubicación..."
+            className="w-full bg-card/60 border border-border/30 rounded-xl pl-9 pr-8 py-2 text-sm font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => onSearchChange("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/20 transition-colors"
+            >
+              <X className="h-3 w-3 text-muted-foreground" />
+            </button>
+          )}
+        </div>
 
         {/* Filters */}
         <div className="mb-3">

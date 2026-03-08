@@ -263,6 +263,8 @@ const Spots = () => {
               onSpotClick={handleSpotClick}
               filters={filters}
               onFiltersChange={setFilters}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
             />
 
             {/* Layer control */}
