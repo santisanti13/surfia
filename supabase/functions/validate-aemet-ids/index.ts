@@ -7,6 +7,10 @@ Deno.serve(async (req) => {
   }
 
   try {
+    const body = await req.json().catch(() => ({}));
+    const batchSize = body.batch_size || 10;
+    const offset = body.offset || 0;
+
     const apiKey = Deno.env.get("AEMET_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AEMET API key not configured" }), {
@@ -20,11 +24,12 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Get all spots with playa_id_aemet
     const { data: spots, error } = await supabase
       .from("surf_spots")
       .select("id, name, playa_id_aemet")
-      .not("playa_id_aemet", "is", null);
+      .not("playa_id_aemet", "is", null)
+      .order("name")
+      .range(offset, offset + batchSize - 1);
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
@@ -38,16 +43,14 @@ Deno.serve(async (req) => {
       name: string;
       playa_id_aemet: string;
       valid: boolean;
-      status: number;
       error?: string;
     }> = [];
 
     for (const spot of spots || []) {
       if (!spot.playa_id_aemet) continue;
 
-      // Add delay between requests to respect rate limits
       if (results.length > 0) {
-        await new Promise((r) => setTimeout(r, 800));
+        await new Promise((r) => setTimeout(r, 700));
       }
 
       try {
@@ -55,84 +58,27 @@ Deno.serve(async (req) => {
         const metaRes = await fetch(url, { headers: { api_key: apiKey } });
 
         if (!metaRes.ok) {
-          results.push({
-            id: spot.id,
-            name: spot.name,
-            playa_id_aemet: spot.playa_id_aemet,
-            valid: false,
-            status: metaRes.status,
-            error: `AEMET returned ${metaRes.status}`,
-          });
+          results.push({ id: spot.id, name: spot.name, playa_id_aemet: spot.playa_id_aemet, valid: false, error: `HTTP ${metaRes.status}` });
           continue;
         }
 
         const meta = await metaRes.json();
         if (!meta.datos) {
-          results.push({
-            id: spot.id,
-            name: spot.name,
-            playa_id_aemet: spot.playa_id_aemet,
-            valid: false,
-            status: 200,
-            error: "No datos URL in response",
-          });
+          results.push({ id: spot.id, name: spot.name, playa_id_aemet: spot.playa_id_aemet, valid: false, error: "No datos URL" });
           continue;
         }
 
-        // Try fetching actual data
         const dataRes = await fetch(meta.datos);
-        if (!dataRes.ok) {
-          results.push({
-            id: spot.id,
-            name: spot.name,
-            playa_id_aemet: spot.playa_id_aemet,
-            valid: false,
-            status: dataRes.status,
-            error: "Data URL returned error",
-          });
-          continue;
-        }
-
         const rawText = await dataRes.text();
         try {
           const data = JSON.parse(rawText);
-          if (Array.isArray(data) && data.length > 0) {
-            results.push({
-              id: spot.id,
-              name: spot.name,
-              playa_id_aemet: spot.playa_id_aemet,
-              valid: true,
-              status: 200,
-            });
-          } else {
-            results.push({
-              id: spot.id,
-              name: spot.name,
-              playa_id_aemet: spot.playa_id_aemet,
-              valid: false,
-              status: 200,
-              error: "Empty data array",
-            });
-          }
+          const isValid = Array.isArray(data) && data.length > 0;
+          results.push({ id: spot.id, name: spot.name, playa_id_aemet: spot.playa_id_aemet, valid: isValid, error: isValid ? undefined : "Empty data" });
         } catch {
-          results.push({
-            id: spot.id,
-            name: spot.name,
-            playa_id_aemet: spot.playa_id_aemet,
-            valid: false,
-            status: 200,
-            error: "Invalid JSON in data response",
-          });
+          results.push({ id: spot.id, name: spot.name, playa_id_aemet: spot.playa_id_aemet, valid: false, error: "Invalid JSON" });
         }
       } catch (e) {
-        results.push({
-          id: spot.id,
-          name: spot.name,
-          playa_id_aemet: spot.playa_id_aemet,
-          valid: false,
-          status: 0,
-          error: e.message,
-        });
+        results.push({ id: spot.id, name: spot.name, playa_id_aemet: spot.playa_id_aemet, valid: false, error: e.message });
       }
     }
 
@@ -141,11 +87,12 @@ Deno.serve(async (req) => {
 
     return new Response(
       JSON.stringify({
-        total: results.length,
+        batch: { offset, size: batchSize, returned: results.length },
         valid_count: valid.length,
         invalid_count: invalid.length,
-        valid,
+        valid: valid.map((r) => `${r.name} (${r.playa_id_aemet})`),
         invalid,
+        next_offset: results.length === batchSize ? offset + batchSize : null,
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
