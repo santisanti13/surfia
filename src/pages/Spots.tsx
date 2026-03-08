@@ -5,7 +5,7 @@ import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Flame } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import SpotDetailPanel from "@/components/SpotDetailPanel";
@@ -13,6 +13,7 @@ import SuggestSpotForm from "@/components/SuggestSpotForm";
 import SpotListSidebar from "@/components/spots/SpotListSidebar";
 import SpotBottomSheet from "@/components/spots/SpotBottomSheet";
 import MapLayerControl, { type LayerType } from "@/components/spots/MapLayerControl";
+import HeatMapOverlay from "@/components/spots/HeatMapOverlay";
 
 import { type SpotFilters, emptyFilters } from "@/components/spots/SpotFiltersBar";
 import { useAuth } from "@/contexts/AuthContext";
