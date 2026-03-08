@@ -5,5 +5,7 @@ project_id = "zaujdnwzngtcnfektfgj"
     verify_jwt = false
   [functions.auth-email-hook]
     verify_jwt = false
+  [functions.aemet-forecast]
+    verify_jwt = false
   [functions.populate-surf-spots]
     verify_jwt = false

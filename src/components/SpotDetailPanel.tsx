@@ -242,7 +242,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
 
             {showForecast && (
               <div className="mb-5">
-                <ForecastCharts spotName={spot.name} />
+                <ForecastCharts spotName={spot.name} playaIdAemet={spot.playa_id_aemet} />
               </div>
             )}
 
