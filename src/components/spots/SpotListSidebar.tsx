@@ -1,4 +1,5 @@
 import { MapPin, Navigation } from "lucide-react";
+import SpotFiltersBar, { type SpotFilters } from "./SpotFiltersBar";
 
 interface SurfSpot {
   id: string;
@@ -14,11 +15,14 @@ interface SurfSpot {
 
 interface SpotListSidebarProps {
   spots: SurfSpot[];
+  allSpotsCount: number;
   selectedSpotId: string | null;
   userPos: [number, number] | null;
   geoError: string | null;
   getDistance: (lat1: number, lon1: number, lat2: number, lon2: number) => number;
   onSpotClick: (spot: SurfSpot) => void;
+  filters: SpotFilters;
+  onFiltersChange: (filters: SpotFilters) => void;
 }
 
 const getDifficultyColor = (difficulty: string | null) => {
@@ -30,7 +34,7 @@ const getDifficultyColor = (difficulty: string | null) => {
   }
 };
 
-const SpotListSidebar = ({ spots, selectedSpotId, userPos, geoError, getDistance, onSpotClick }: SpotListSidebarProps) => {
+const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoError, getDistance, onSpotClick, filters, onFiltersChange }: SpotListSidebarProps) => {
   const sortedSpots = userPos
     ? [...spots].sort((a, b) => getDistance(userPos[0], userPos[1], a.lat, a.lng) - getDistance(userPos[0], userPos[1], b.lat, b.lng))
     : spots;
@@ -38,7 +42,7 @@ const SpotListSidebar = ({ spots, selectedSpotId, userPos, geoError, getDistance
   return (
     <div className="absolute top-0 left-0 h-full w-80 bg-background/95 backdrop-blur-xl border-r border-border/50 overflow-y-auto z-[1000] hidden md:block">
       <div className="p-4">
-        <div className="mb-4">
+        <div className="mb-3">
           <h2 className="font-display text-2xl tracking-wide">SPOTS DE SURF</h2>
           <p className="text-xs text-muted-foreground font-body mt-1">
             {spots.length} spots · {userPos ? "Ordenados por distancia" : "España"}
@@ -51,6 +55,17 @@ const SpotListSidebar = ({ spots, selectedSpotId, userPos, geoError, getDistance
             {geoError}
           </div>
         )}
+
+        {/* Filters */}
+        <div className="mb-3">
+          <SpotFiltersBar
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            hasUserPos={!!userPos}
+            totalSpots={allSpotsCount}
+            filteredCount={spots.length}
+          />
+        </div>
 
         <div className="space-y-1.5">
           {sortedSpots.map((spot) => (
@@ -89,6 +104,13 @@ const SpotListSidebar = ({ spots, selectedSpotId, userPos, geoError, getDistance
               </div>
             </button>
           ))}
+
+          {sortedSpots.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-sm text-muted-foreground font-body">No hay spots con estos filtros</p>
+              <p className="text-xs text-muted-foreground font-body mt-1">Prueba a cambiar los filtros</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

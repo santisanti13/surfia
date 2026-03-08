@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect } from "react";
-import { motion, useMotionValue, useTransform, PanInfo } from "framer-motion";
-import { MapPin, ChevronUp, GripHorizontal } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { MapPin, ChevronUp } from "lucide-react";
+import SpotFiltersBar, { type SpotFilters } from "./SpotFiltersBar";
 
 interface SurfSpot {
   id: string;
@@ -16,14 +17,16 @@ interface SurfSpot {
 
 interface SpotBottomSheetProps {
   spots: SurfSpot[];
+  allSpotsCount: number;
   selectedSpotId: string | null;
   userPos: [number, number] | null;
   getDistance: (lat1: number, lon1: number, lat2: number, lon2: number) => number;
   onSpotClick: (spot: SurfSpot) => void;
+  filters: SpotFilters;
+  onFiltersChange: (filters: SpotFilters) => void;
 }
 
 const COLLAPSED_HEIGHT = 80;
-const PEEK_HEIGHT = 320;
 
 const getDifficultyColor = (difficulty: string | null) => {
   switch (difficulty) {
@@ -34,9 +37,8 @@ const getDifficultyColor = (difficulty: string | null) => {
   }
 };
 
-const SpotBottomSheet = ({ spots, selectedSpotId, userPos, getDistance, onSpotClick }: SpotBottomSheetProps) => {
+const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDistance, onSpotClick, filters, onFiltersChange }: SpotBottomSheetProps) => {
   const [expanded, setExpanded] = useState(false);
-  const sheetRef = useRef<HTMLDivElement>(null);
 
   const sortedSpots = userPos
     ? [...spots].sort((a, b) => getDistance(userPos[0], userPos[1], a.lat, a.lng) - getDistance(userPos[0], userPos[1], b.lat, b.lng))
@@ -46,7 +48,6 @@ const SpotBottomSheet = ({ spots, selectedSpotId, userPos, getDistance, onSpotCl
 
   return (
     <motion.div
-      ref={sheetRef}
       className="fixed bottom-0 left-0 right-0 z-[1000] md:hidden"
       animate={{ height: currentHeight }}
       transition={{ type: "spring", damping: 30, stiffness: 300 }}
@@ -69,10 +70,9 @@ const SpotBottomSheet = ({ spots, selectedSpotId, userPos, getDistance, onSpotCl
           </div>
         </button>
 
-        {/* Scrollable spot list */}
+        {/* Scrollable content */}
         <div className="flex-1 overflow-y-auto px-3 pb-4">
           {!expanded ? (
-            /* Horizontal scroll when collapsed */
             <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
               {sortedSpots.slice(0, 10).map((spot) => (
                 <button
@@ -99,42 +99,59 @@ const SpotBottomSheet = ({ spots, selectedSpotId, userPos, getDistance, onSpotCl
               ))}
             </div>
           ) : (
-            /* Vertical list when expanded */
-            <div className="space-y-1.5">
-              {sortedSpots.map((spot) => (
-                <button
-                  key={spot.id}
-                  onClick={() => { onSpotClick(spot); setExpanded(false); }}
-                  className={`w-full text-left p-3 rounded-xl transition-all ${
-                    selectedSpotId === spot.id
-                      ? "bg-primary/10 border border-primary/30"
-                      : "bg-card/50 border border-transparent hover:bg-card"
-                  }`}
-                >
-                  <div className="flex justify-between items-start gap-2">
-                    <div className="min-w-0">
-                      <p className="font-body font-semibold text-sm truncate">{spot.name}</p>
-                      <p className="text-xs text-muted-foreground font-body flex items-center gap-1 mt-0.5">
-                        <MapPin className="h-3 w-3 shrink-0" />
-                        <span className="truncate">{spot.location}</span>
-                      </p>
+            <div className="space-y-3">
+              {/* Filters */}
+              <SpotFiltersBar
+                filters={filters}
+                onFiltersChange={onFiltersChange}
+                hasUserPos={!!userPos}
+                totalSpots={allSpotsCount}
+                filteredCount={spots.length}
+                compact
+              />
+
+              <div className="space-y-1.5">
+                {sortedSpots.map((spot) => (
+                  <button
+                    key={spot.id}
+                    onClick={() => { onSpotClick(spot); setExpanded(false); }}
+                    className={`w-full text-left p-3 rounded-xl transition-all ${
+                      selectedSpotId === spot.id
+                        ? "bg-primary/10 border border-primary/30"
+                        : "bg-card/50 border border-transparent hover:bg-card"
+                    }`}
+                  >
+                    <div className="flex justify-between items-start gap-2">
+                      <div className="min-w-0">
+                        <p className="font-body font-semibold text-sm truncate">{spot.name}</p>
+                        <p className="text-xs text-muted-foreground font-body flex items-center gap-1 mt-0.5">
+                          <MapPin className="h-3 w-3 shrink-0" />
+                          <span className="truncate">{spot.location}</span>
+                        </p>
+                      </div>
+                      {userPos && (
+                        <span className="text-xs text-primary font-body font-semibold whitespace-nowrap bg-primary/10 px-2 py-0.5 rounded-full">
+                          {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
+                        </span>
+                      )}
                     </div>
-                    {userPos && (
-                      <span className="text-xs text-primary font-body font-semibold whitespace-nowrap bg-primary/10 px-2 py-0.5 rounded-full">
-                        {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
+                    <div className="flex gap-1.5 mt-2">
+                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary px-2 py-0.5 rounded-full font-body">
+                        {spot.wave_type?.replace(/_/g, " ")}
                       </span>
-                    )}
+                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
+                        {spot.difficulty}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+
+                {sortedSpots.length === 0 && (
+                  <div className="text-center py-6">
+                    <p className="text-sm text-muted-foreground font-body">No hay spots con estos filtros</p>
                   </div>
-                  <div className="flex gap-1.5 mt-2">
-                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary px-2 py-0.5 rounded-full font-body">
-                      {spot.wave_type?.replace(/_/g, " ")}
-                    </span>
-                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
-                      {spot.difficulty}
-                    </span>
-                  </div>
-                </button>
-              ))}
+                )}
+              </div>
             </div>
           )}
         </div>
