@@ -13,7 +13,7 @@ import SuggestSpotForm from "@/components/SuggestSpotForm";
 import SpotListSidebar from "@/components/spots/SpotListSidebar";
 import SpotBottomSheet from "@/components/spots/SpotBottomSheet";
 import MapLayerControl, { type LayerType } from "@/components/spots/MapLayerControl";
-import HeatMapOverlay from "@/components/spots/HeatMapOverlay";
+
 import { type SpotFilters, emptyFilters } from "@/components/spots/SpotFiltersBar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
