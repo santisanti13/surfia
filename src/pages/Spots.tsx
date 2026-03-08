@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
@@ -14,6 +14,7 @@ import SpotListSidebar from "@/components/spots/SpotListSidebar";
 import SpotBottomSheet from "@/components/spots/SpotBottomSheet";
 import MapLayerControl, { type LayerType } from "@/components/spots/MapLayerControl";
 import HeatMapOverlay from "@/components/spots/HeatMapOverlay";
+import { type SpotFilters, emptyFilters } from "@/components/spots/SpotFiltersBar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 
@@ -52,6 +53,18 @@ const TILE_LAYERS: Record<LayerType, { url: string; attribution: string }> = {
   },
 };
 
+function applyFilters(spots: SurfSpot[], filters: SpotFilters, userPos: [number, number] | null): SurfSpot[] {
+  return spots.filter((spot) => {
+    if (filters.difficulty.length > 0 && !filters.difficulty.includes(spot.difficulty || "")) return false;
+    if (filters.waveType.length > 0 && !filters.waveType.includes(spot.wave_type || "")) return false;
+    if (filters.maxDistance !== null && userPos) {
+      const dist = getDistance(userPos[0], userPos[1], spot.lat, spot.lng);
+      if (dist > filters.maxDistance) return false;
+    }
+    return true;
+  });
+}
+
 const Spots = () => {
   const { user } = useAuth();
   const [spots, setSpots] = useState<SurfSpot[]>([]);
@@ -62,10 +75,13 @@ const Spots = () => {
   const [geoError, setGeoError] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<LayerType>("streets");
   const [showHeatMap, setShowHeatMap] = useState(false);
+  const [filters, setFilters] = useState<SpotFilters>(emptyFilters);
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
+
+  const filteredSpots = useMemo(() => applyFilters(spots, filters, userPos), [spots, filters, userPos]);
 
   const fetchSpots = useCallback(async () => {
     const { data } = await supabase.from("surf_spots").select("*");
@@ -129,11 +145,10 @@ const Spots = () => {
       .bindPopup("<span style='font-family: Inter, sans-serif; font-size: 13px;'>📍 Tu ubicación</span>");
   }, [userPos]);
 
-  // Add clustered markers
+  // Add clustered markers — now depends on filteredSpots
   useEffect(() => {
-    if (!mapRef.current || spots.length === 0) return;
+    if (!mapRef.current || filteredSpots.length === 0) return;
 
-    // Clear old cluster group
     if (clusterGroupRef.current) {
       mapRef.current.removeLayer(clusterGroupRef.current);
     }
@@ -167,7 +182,7 @@ const Spots = () => {
       iconAnchor: [16, 16],
     });
 
-    spots.forEach((spot) => {
+    filteredSpots.forEach((spot) => {
       const marker = L.marker([spot.lat, spot.lng], { icon: surfIcon })
         .on("click", () => handleSpotClick(spot));
 
@@ -188,7 +203,15 @@ const Spots = () => {
 
     mapRef.current.addLayer(clusterGroup);
     clusterGroupRef.current = clusterGroup;
-  }, [spots, userPos]);
+
+    // If no spots match and we had some before, clear the cluster
+    return () => {
+      if (mapRef.current && clusterGroupRef.current) {
+        mapRef.current.removeLayer(clusterGroupRef.current);
+        clusterGroupRef.current = null;
+      }
+    };
+  }, [filteredSpots, userPos]);
 
   const handleSpotClick = useCallback((spot: SurfSpot) => {
     setSelectedSpot(spot);
@@ -210,25 +233,31 @@ const Spots = () => {
             <div ref={mapContainerRef} className="h-full w-full z-0" style={{ background: "#f0f4f8" }} />
 
             {/* Heat map overlay */}
-            <HeatMapOverlay map={mapRef.current} spots={spots} visible={showHeatMap} />
+            <HeatMapOverlay map={mapRef.current} spots={filteredSpots} visible={showHeatMap} />
 
             {/* Desktop sidebar */}
             <SpotListSidebar
-              spots={spots}
+              spots={filteredSpots}
+              allSpotsCount={spots.length}
               selectedSpotId={selectedSpot?.id || null}
               userPos={userPos}
               geoError={geoError}
               getDistance={getDistance}
               onSpotClick={handleSpotClick}
+              filters={filters}
+              onFiltersChange={setFilters}
             />
 
             {/* Mobile bottom sheet */}
             <SpotBottomSheet
-              spots={spots}
+              spots={filteredSpots}
+              allSpotsCount={spots.length}
               selectedSpotId={selectedSpot?.id || null}
               userPos={userPos}
               getDistance={getDistance}
               onSpotClick={handleSpotClick}
+              filters={filters}
+              onFiltersChange={setFilters}
             />
 
             {/* Layer control */}
