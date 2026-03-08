@@ -183,9 +183,9 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
             </div>
 
             {usingMock && (
-              <div className="flex items-center gap-2 text-xs text-accent bg-accent/10 rounded-lg p-2 mb-4 border border-accent/20">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-lg p-2 mb-4 border border-border/20">
                 <AlertTriangle className="h-3 w-3 shrink-0" />
-                <span className="font-body">Datos simulados. Conecta AEMET para datos reales.</span>
+                <span className="font-body">Datos estimados. Previsión oficial no disponible para este spot.</span>
               </div>
             )}
 
