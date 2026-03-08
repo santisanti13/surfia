@@ -76,7 +76,7 @@ const Spots = () => {
   const [loading, setLoading] = useState(true);
   const [geoError, setGeoError] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<LayerType>("streets");
-  const [showHeatMap, setShowHeatMap] = useState(false);
+  
   const [filters, setFilters] = useState<SpotFilters>(emptyFilters);
   const [searchQuery, setSearchQuery] = useState("");
   const mapRef = useRef<L.Map | null>(null);
