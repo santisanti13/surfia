@@ -1,4 +1,4 @@
-import { Waves, Wind, Thermometer, ArrowRight, MapPin, ChevronDown, Compass, BarChart3, Radio } from "lucide-react";
+import { Waves, Wind, Thermometer, ArrowRight, MapPin, ChevronDown, Compass, BarChart3, Radio, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, type Easing } from "framer-motion";
 import { Button } from "@/components/ui/button";
