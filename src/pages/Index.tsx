@@ -126,14 +126,14 @@ const Index = () => {
             className="flex items-end justify-between mb-12"
           >
             <div>
-              <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Trending</span>
+              <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Tendencia</span>
               <h2 className="text-5xl md:text-7xl font-display tracking-tight mt-2">
-                Top <span className="text-gradient-ocean">Spots</span>
+                Mejores <span className="text-gradient-ocean">Spots</span>
               </h2>
             </div>
-            <button className="text-muted-foreground hover:text-primary transition-colors font-body text-sm tracking-wide uppercase flex items-center gap-2">
-              View All <ArrowRight className="h-4 w-4" />
-            </button>
+            <Link to="/spots" className="text-muted-foreground hover:text-primary transition-colors font-body text-sm tracking-wide uppercase flex items-center gap-2">
+              Ver todos <ArrowRight className="h-4 w-4" />
+            </Link>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
