@@ -1,4 +1,4 @@
-import { Waves, Wind, Thermometer, ArrowRight, MapPin, ChevronDown, Compass, BarChart3, Radio } from "lucide-react";
+import { Waves, Wind, Thermometer, ArrowRight, MapPin, ChevronDown, Compass, BarChart3, Radio, Bell } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, type Easing } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -37,9 +37,9 @@ const spots = [
 ];
 
 const features = [
-  { icon: BarChart3, title: "16-day long range forecasts" },
-  { icon: Compass, title: "High-resolution nearshore modeling" },
-  { icon: Radio, title: "Live wind and tide updates" },
+  { icon: BarChart3, title: "Previsiones a 16 días" },
+  { icon: Compass, title: "Modelado costero de alta resolución" },
+  { icon: Radio, title: "Viento y mareas en tiempo real" },
 ];
 
 const fadeUp = {
@@ -90,11 +90,18 @@ const Index = () => {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mt-8"
           >
-            <Link to="/spots">
-              <Button variant="hero" size="lg" className="rounded-full px-10 py-6 text-base">
-                Find Waves <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/spots">
+                <Button variant="hero" size="lg" className="rounded-full px-10 py-6 text-base">
+                  Explorar Spots <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/alerts">
+                <Button variant="glass" size="lg" className="rounded-full px-10 py-6 text-base">
+                  <Bell className="mr-2 h-5 w-5" /> Ver Alertas
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
 
@@ -119,14 +126,14 @@ const Index = () => {
             className="flex items-end justify-between mb-12"
           >
             <div>
-              <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Trending</span>
+              <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Tendencia</span>
               <h2 className="text-5xl md:text-7xl font-display tracking-tight mt-2">
-                Top <span className="text-gradient-ocean">Spots</span>
+                Mejores <span className="text-gradient-ocean">Spots</span>
               </h2>
             </div>
-            <button className="text-muted-foreground hover:text-primary transition-colors font-body text-sm tracking-wide uppercase flex items-center gap-2">
-              View All <ArrowRight className="h-4 w-4" />
-            </button>
+            <Link to="/spots" className="text-muted-foreground hover:text-primary transition-colors font-body text-sm tracking-wide uppercase flex items-center gap-2">
+              Ver todos <ArrowRight className="h-4 w-4" />
+            </Link>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -156,12 +163,12 @@ const Index = () => {
             variants={fadeUp}
             custom={0}
           >
-            <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Precision</span>
+            <span className="text-primary font-body text-sm font-semibold tracking-widest uppercase">Precisión</span>
             <h2 className="text-5xl md:text-7xl font-display tracking-tight mt-2 mb-6">
-              Forecasting
+              Previsión
             </h2>
             <p className="text-muted-foreground font-body leading-relaxed text-lg mb-8">
-              Our proprietary swell models combine global buoy data with local bathymetry to give you the most accurate wave predictions on the planet.
+              Nuestros modelos combinan datos de boyas y batimetría local para ofrecerte las predicciones de olas más precisas.
             </p>
             <div className="space-y-4">
               {features.map((f, i) => (
@@ -181,6 +188,20 @@ const Index = () => {
                 </motion.div>
               ))}
             </div>
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeUp}
+              custom={4}
+              className="mt-8"
+            >
+              <Link to="/spots">
+                <Button variant="hero" size="lg" className="rounded-full px-8 py-5">
+                  Ver Previsiones <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </motion.div>
           </motion.div>
 
           <motion.div
