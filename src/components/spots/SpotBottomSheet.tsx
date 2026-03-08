@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, ChevronUp } from "lucide-react";
+import { MapPin, ChevronUp, Search, X } from "lucide-react";
 import SpotFiltersBar, { type SpotFilters } from "./SpotFiltersBar";
 
 interface SurfSpot {
@@ -24,6 +24,8 @@ interface SpotBottomSheetProps {
   onSpotClick: (spot: SurfSpot) => void;
   filters: SpotFilters;
   onFiltersChange: (filters: SpotFilters) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
 }
 
 const COLLAPSED_HEIGHT = 80;
@@ -37,7 +39,7 @@ const getDifficultyColor = (difficulty: string | null) => {
   }
 };
 
-const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDistance, onSpotClick, filters, onFiltersChange }: SpotBottomSheetProps) => {
+const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDistance, onSpotClick, filters, onFiltersChange, searchQuery, onSearchChange }: SpotBottomSheetProps) => {
   const [expanded, setExpanded] = useState(false);
 
   const sortedSpots = userPos
@@ -100,6 +102,26 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
             </div>
           ) : (
             <div className="space-y-3">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  placeholder="Buscar spot..."
+                  className="w-full bg-card/60 border border-border/30 rounded-xl pl-9 pr-8 py-2 text-sm font-body placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => onSearchChange("")}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground/20 transition-colors"
+                  >
+                    <X className="h-3 w-3 text-muted-foreground" />
+                  </button>
+                )}
+              </div>
+
               {/* Filters */}
               <SpotFiltersBar
                 filters={filters}

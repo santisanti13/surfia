@@ -53,8 +53,10 @@ const TILE_LAYERS: Record<LayerType, { url: string; attribution: string }> = {
   },
 };
 
-function applyFilters(spots: SurfSpot[], filters: SpotFilters, userPos: [number, number] | null): SurfSpot[] {
+function applyFilters(spots: SurfSpot[], filters: SpotFilters, userPos: [number, number] | null, search: string): SurfSpot[] {
+  const q = search.toLowerCase().trim();
   return spots.filter((spot) => {
+    if (q && !spot.name.toLowerCase().includes(q) && !spot.location.toLowerCase().includes(q)) return false;
     if (filters.difficulty.length > 0 && !filters.difficulty.includes(spot.difficulty || "")) return false;
     if (filters.waveType.length > 0 && !filters.waveType.includes(spot.wave_type || "")) return false;
     if (filters.maxDistance !== null && userPos) {
@@ -76,12 +78,13 @@ const Spots = () => {
   const [activeLayer, setActiveLayer] = useState<LayerType>("streets");
   const [showHeatMap, setShowHeatMap] = useState(false);
   const [filters, setFilters] = useState<SpotFilters>(emptyFilters);
+  const [searchQuery, setSearchQuery] = useState("");
   const mapRef = useRef<L.Map | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const clusterGroupRef = useRef<L.MarkerClusterGroup | null>(null);
 
-  const filteredSpots = useMemo(() => applyFilters(spots, filters, userPos), [spots, filters, userPos]);
+  const filteredSpots = useMemo(() => applyFilters(spots, filters, userPos, searchQuery), [spots, filters, userPos, searchQuery]);
 
   const fetchSpots = useCallback(async () => {
     const { data } = await supabase.from("surf_spots").select("*");
@@ -246,6 +249,8 @@ const Spots = () => {
               onSpotClick={handleSpotClick}
               filters={filters}
               onFiltersChange={setFilters}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
             />
 
             {/* Mobile bottom sheet */}
@@ -258,6 +263,8 @@ const Spots = () => {
               onSpotClick={handleSpotClick}
               filters={filters}
               onFiltersChange={setFilters}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
             />
 
             {/* Layer control */}
