@@ -50,7 +50,7 @@ Deno.serve(async (req) => {
       if (!spot.playa_id_aemet) continue;
 
       if (results.length > 0) {
-        await new Promise((r) => setTimeout(r, 700));
+        await new Promise((r) => setTimeout(r, 2000));
       }
 
       try {
