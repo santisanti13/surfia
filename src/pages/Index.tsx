@@ -90,11 +90,18 @@ const Index = () => {
             transition={{ delay: 0.7, duration: 0.6 }}
             className="mt-8"
           >
-            <Link to="/spots">
-              <Button variant="hero" size="lg" className="rounded-full px-10 py-6 text-base">
-                Find Waves <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/spots">
+                <Button variant="hero" size="lg" className="rounded-full px-10 py-6 text-base">
+                  Explorar Spots <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link to="/alerts">
+                <Button variant="glass" size="lg" className="rounded-full px-10 py-6 text-base">
+                  <Bell className="mr-2 h-5 w-5" /> Ver Alertas
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
 
