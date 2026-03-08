@@ -1,31 +1,28 @@
 
 
-## SEO & GEO Optimization for Surfia
+## Plan: Desarrollar los botones de la Home
 
-### Title & Description
+### Botones identificados que necesitan mejora
 
-**Title (60 chars):**
-`Surfia — Previsión de Olas y Surf en Tiempo Real | Alertas Cerca de Ti`
+1. **Hero CTA "Find Waves"** (línea 94) — Funciona pero el texto está en inglés y solo hay un botón. Añadir un segundo CTA secundario y traducir al español.
 
-**Meta Description (155 chars):**
-`Consulta la previsión de olas, viento y marejada en tiempo real. Recibe alertas de surf según tu ubicación. Encuentra los mejores spots cerca de ti con Surfia.`
+2. **"View All" en Trending Spots** (línea 127) — Es un `<button>` sin enlace real, no navega a ningún sitio. Convertirlo en un `<Link>` funcional a `/spots`.
 
-### Changes to implement
+3. **Sección Forecasting** — No tiene ningún CTA. Añadir un botón que lleve al mapa de spots.
 
-**1. `index.html`** — Update all meta tags:
-- `<html lang="es">` (target audience is Spanish)
-- `<title>` with SEO-optimized title
-- `<meta name="description">` with geo-targeted description
-- Add `<meta name="keywords">` with surf-related Spanish keywords
-- Add geo meta tags: `geo.region`, `geo.placename`, `geo.position`
-- Update `og:title`, `og:description`, `og:locale`
-- Add `twitter:title`, `twitter:description`
-- Add canonical URL placeholder
+4. **Footer links** — Los enlaces "About", "Privacy", "Terms", "Contact" apuntan a `#`. Dejarlos como están (no hay páginas para ellos) pero se pueden traducir.
 
-**2. `src/pages/Index.tsx`** — Update visible hero text:
-- Hero subtitle to include geo-relevant keywords naturally (e.g., "Previsión de olas en tiempo real cerca de ti")
+### Cambios en `src/pages/Index.tsx`
 
-**3. `public/robots.txt`** — Add sitemap reference (already allows all bots, which is good)
+1. **Hero**: Traducir "Find Waves" → "Explorar Spots". Añadir un segundo botón `variant="glass"` con texto "Ver Alertas" que enlace a `/alerts` (solo visible si hay usuario logueado, o siempre visible).
 
-This is purely a metadata and copy update — no structural or logic changes needed.
+2. **Trending "View All"**: Cambiar el `<button>` por un `<Link to="/spots">` con estilos de botón para que sea navegable.
+
+3. **Forecasting section**: Añadir un botón CTA al final de la columna izquierda (después de los features) que diga "Ver Previsiones" y enlace a `/spots`.
+
+4. **Traducir textos** de sección al español: "Trending" → "Tendencia", "Top Spots" → "Mejores Spots", "Precision" → "Precisión", "Forecasting" → "Previsión", features en español.
+
+### Archivos a modificar
+
+- `src/pages/Index.tsx` — Todos los cambios anteriores
 
