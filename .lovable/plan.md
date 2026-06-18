@@ -1,31 +1,37 @@
+## Cómo publicar el proyecto en GitHub
 
+No puedo crear el repo por ti — la conexión con GitHub la tiene que autorizar tu cuenta. Sigue estos pasos desde el editor de Lovable:
 
-## SEO & GEO Optimization for Surfia
+### Pasos
 
-### Title & Description
+1. **Abre el menú de integraciones**
+   - En el chat (abajo a la izquierda) pulsa el botón **+**.
+   - Selecciona **GitHub** → **Connect project**.
 
-**Title (60 chars):**
-`Surfia — Previsión de Olas y Surf en Tiempo Real | Alertas Cerca de Ti`
+2. **Autoriza la Lovable GitHub App**
+   - Se abrirá GitHub en una pestaña nueva.
+   - Inicia sesión si hace falta y pulsa **Authorize Lovable**.
+   - Elige la cuenta u organización donde quieres alojar el repo.
+   - Puedes dar acceso a *todos los repos* o solo *seleccionar repos* (recomendado: "All repositories" para que pueda crear el nuevo).
 
-**Meta Description (155 chars):**
-`Consulta la previsión de olas, viento y marejada en tiempo real. Recibe alertas de surf según tu ubicación. Encuentra los mejores spots cerca de ti con Surfia.`
+3. **Crea el repositorio**
+   - Vuelve a Lovable. Verás el panel con tu cuenta/organización conectada.
+   - Pulsa **Create Repository**.
+   - Lovable creará el repo y subirá todo el código automáticamente.
 
-### Changes to implement
+4. **Listo — sincronización bidireccional activa**
+   - Cualquier cambio que haga yo en Lovable se empuja a GitHub.
+   - Cualquier commit que hagas tú en GitHub (local, PRs, etc.) vuelve a Lovable en tiempo real.
 
-**1. `index.html`** — Update all meta tags:
-- `<html lang="es">` (target audience is Spanish)
-- `<title>` with SEO-optimized title
-- `<meta name="description">` with geo-targeted description
-- Add `<meta name="keywords">` with surf-related Spanish keywords
-- Add geo meta tags: `geo.region`, `geo.placename`, `geo.position`
-- Update `og:title`, `og:description`, `og:locale`
-- Add `twitter:title`, `twitter:description`
-- Add canonical URL placeholder
+### Notas importantes
 
-**2. `src/pages/Index.tsx`** — Update visible hero text:
-- Hero subtitle to include geo-relevant keywords naturally (e.g., "Previsión de olas en tiempo real cerca de ti")
+- Solo se puede conectar **una cuenta de GitHub** por cuenta de Lovable.
+- Por ahora **no se pueden importar repos existentes** a un proyecto de Lovable — solo crear uno nuevo desde el proyecto.
+- El repo se crea **privado** por defecto; puedes cambiarlo a público desde GitHub si quieres.
+- Los datos de la base de datos **no se suben a GitHub** (solo el código). Para exportarlos: Cloud → Database → Tables → exportar CSV.
 
-**3. `public/robots.txt`** — Add sitemap reference (already allows all bots, which is good)
+### Si algo falla
 
-This is purely a metadata and copy update — no structural or logic changes needed.
+Dime exactamente qué mensaje ves (por ejemplo "no aparece mi organización", "error al autorizar", "no veo el botón Create Repository") y te ayudo a resolverlo.
 
+¿Quieres que mientras tanto siga con alguna otra mejora del código (spots reales en la home, buscador global, perfil de usuario)?
