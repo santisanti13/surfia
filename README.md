@@ -1,73 +1,126 @@
-# Welcome to your Lovable project
+# SurfIA — Encuentra olas allá donde estés
 
-## Project info
+> Alertas inteligentes de surf con IA. No esperes a mirar el forecast — SurfIA te avisa cuando hay olas cerca.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+**Live:** [surfiaa.com](https://surfiaa.com)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## The problem
 
-**Use Lovable**
+Most surfers miss good sessions not because the waves aren't there, but because they weren't paying attention to the forecast. Existing apps require you to actively check conditions — SurfIA flips that: **it tells you when to go, not the other way around.**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## What it does
 
-**Use your preferred IDE**
+SurfIA monitors surf conditions in real time using the AEMET API and sends smart alerts when wave height, wind, and swell direction match the user's preferences for their saved spots.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Smart alerts** — AI-generated summaries of surf conditions ("1.2m waves with 10s period, light offshore wind — good session at your local break")
+- **Spot discovery** — find surf spots near your location or anywhere in Spain
+- **Real-time forecast** — wave height, wind speed and direction, swell period
+- **PWA-ready** — installable on mobile, designed for use on the beach
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Architecture
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```
+User → SurfIA Web App (React + Supabase)
+              │
+              ├── Auth & DB → Supabase (PostgreSQL + RLS)
+              │
+              ├── Forecast → AEMET API (wave height, wind, swell)
+              │
+              └── Alert engine → AI-generated condition summaries
+                                 triggered by user-defined thresholds
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+The alert engine evaluates incoming forecast data against each user's
+saved spots and preferences, then generates a natural-language summary
+of conditions — so instead of reading raw numbers, users get a plain
+message that tells them whether it's worth paddling out.
 
-# Step 3: Install the necessary dependencies.
-npm i
+---
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Tech stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React + TypeScript + Vite |
+| UI | shadcn/ui + Tailwind CSS |
+| Backend | Supabase (PostgreSQL + Edge Functions) |
+| Auth | Supabase Auth |
+| Forecast data | AEMET API |
+| Mobile | Capacitor (iOS/Android wrapper) |
+| Deployment | Lovable + custom domain `surfiaa.com` |
+
+---
+
+## Key features
+
+### Proactive alerts
+Unlike traditional forecast apps, SurfIA pushes conditions to you.
+The alert system evaluates wave height, wind speed, swell period and
+direction against user-configured thresholds — and fires when conditions
+are right, rather than waiting for you to check.
+
+### AI-generated condition summaries
+Raw forecast numbers (Hs: 1.2m, Tp: 10s, Dir: 290°) are translated
+into plain language by an AI layer: *"Clean 1m waves with a long period
+and light offshore wind — worth going out if you're intermediate or above."*
+
+### Spot management
+Users can save and name their local breaks, set per-spot preferences
+(minimum wave height, acceptable wind directions), and get alerts
+tailored to each spot independently.
+
+### PWA + Capacitor
+The app is installable as a PWA and wrapped with Capacitor for native
+iOS/Android distribution — same codebase, three surfaces.
+
+---
+
+## Roadmap
+
+- [ ] Migrate forecast source from AEMET to [Open-Meteo Marine API](https://marine-api.open-meteo.com) for richer swell data (period, direction, secondary swell)
+- [ ] Native push notifications via Capacitor (replacing in-app alerts)
+- [ ] Community-sourced spot database (user reports, photos, difficulty ratings)
+- [ ] Session logging — track your sessions and correlate with forecast accuracy
+- [ ] Tide integration
+
+---
+
+## Why this exists
+
+Spain has hundreds of surf spots, many of them under-documented on
+mainstream apps. And the surfers who use them are often working, travelling,
+or away from their home break — they need to be told when conditions are
+right, not reminded to check an app they've already forgotten about.
+
+SurfIA is a personal project born from that frustration. It's also an
+exploration of what proactive, AI-assisted tooling looks like for a
+consumer use case — the same "don't make me look, tell me when" pattern
+that powers good B2B monitoring tools, applied to something people
+actually love.
+
+---
+
+## Local development
+
+```bash
+git clone https://github.com/santisanti13/surfia.git
+cd surfia
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Requires a Supabase project and an AEMET API key. Copy `.env.example`
+to `.env` and fill in your credentials.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
+## Author
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built by **Santi** — SaaS builder, EdTech & GovTech.
+[santiagojimenezvalero.com](https://www.santiagojimenezvalero.com) · [LinkedIn](https://www.linkedin.com/in/santijiménezvalero)
