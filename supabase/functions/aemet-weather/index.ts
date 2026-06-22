@@ -55,23 +55,31 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { playa_id } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { playa_id, lat: latIn, lng: lngIn } = body as {
+      playa_id?: string; lat?: number; lng?: number;
+    };
 
-    if (!playa_id) {
-      return new Response(JSON.stringify({ error: "playa_id is required" }), {
+    if (!playa_id && (latIn == null || lngIn == null)) {
+      return new Response(JSON.stringify({ error: "playa_id or lat/lng required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
     // ===== 1) Try Stormglass first =====
-    const spot = await getSpotByPlayaId(playa_id);
-    if (spot) {
-      const hours = await fetchStormglassHours(spot.lat, spot.lng, 6);
+    let lat: number | null = typeof latIn === "number" ? latIn : null;
+    let lng: number | null = typeof lngIn === "number" ? lngIn : null;
+    if ((lat == null || lng == null) && playa_id) {
+      const spot = await getSpotByPlayaId(playa_id);
+      if (spot) { lat = spot.lat; lng = spot.lng; }
+    }
+    if (lat != null && lng != null) {
+      const hours = await fetchStormglassHours(lat, lng, 6);
       if (hours && hours.length > 0) {
         const h = hours[0];
         const waveHeight = h.waveHeight ?? 0;
-        const windSpeedKmh = (h.windSpeed ?? 0) * 3.6; // m/s -> km/h
+        const windSpeedKmh = (h.windSpeed ?? 0) * 3.6;
         const result = {
           source: "stormglass",
           oleaje: {
@@ -99,7 +107,12 @@ Deno.serve(async (req) => {
       }
     }
 
-    // ===== 2) Fallback to AEMET =====
+    // ===== 2) Fallback to AEMET (needs playa_id) =====
+    if (!playa_id) {
+      return new Response(JSON.stringify({ error: "no data available" }), {
+        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
     const apiKey = Deno.env.get("AEMET_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AEMET API key not configured" }), {
