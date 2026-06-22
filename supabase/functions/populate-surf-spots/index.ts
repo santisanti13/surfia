@@ -1,8 +1,10 @@
 import { corsHeaders } from "../_shared/cors.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-// Comprehensive list of surf spots in Spain with AEMET beach IDs
-const SPAIN_SURF_SPOTS = [
+// Comprehensive list of surf spots in Spain.
+// Spots with playa_id_aemet get both Stormglass (primary) and AEMET (fallback).
+// Spots without playa_id_aemet rely on Stormglass marine data via lat/lng.
+const SPAIN_SURF_SPOTS: Array<{ name: string; location: string; lat: number; lng: number; playa_id_aemet?: string; wave_type: string; difficulty: string }> = [
   // PAÍS VASCO
   { name: "Mundaka", location: "Vizcaya, País Vasco", lat: 43.4072, lng: -2.6981, playa_id_aemet: "4800301", wave_type: "point_break", difficulty: "expert" },
   { name: "Sopelana - La Salvaje", location: "Vizcaya, País Vasco", lat: 43.3835, lng: -2.9833, playa_id_aemet: "4800601", wave_type: "beach_break", difficulty: "intermediate" },
@@ -82,6 +84,79 @@ const SPAIN_SURF_SPOTS = [
   { name: "El Rompido", location: "Cartaya, Huelva", lat: 37.2000, lng: -7.1278, playa_id_aemet: "2100501", wave_type: "beach_break", difficulty: "beginner" },
   { name: "Isla Cristina", location: "Isla Cristina, Huelva", lat: 37.1944, lng: -7.3194, playa_id_aemet: "2100301", wave_type: "beach_break", difficulty: "beginner" },
   { name: "Matalascañas", location: "Almonte, Huelva", lat: 36.9861, lng: -6.5639, playa_id_aemet: "2101001", wave_type: "beach_break", difficulty: "intermediate" },
+
+  // ===== EXTRA SPOTS (Stormglass-only) =====
+  // PAÍS VASCO extra
+  { name: "Ereaga", location: "Getxo, Vizcaya", lat: 43.3525, lng: -3.0214, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Plentzia", location: "Plentzia, Vizcaya", lat: 43.4108, lng: -2.9544, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Barinatxe (La Salvaje)", location: "Sopelana, Vizcaya", lat: 43.3850, lng: -2.9889, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Ogeia", location: "Ispaster, Vizcaya", lat: 43.3742, lng: -2.5564, wave_type: "reef_break", difficulty: "advanced" },
+  { name: "Roca Puta", location: "Sopelana, Vizcaya", lat: 43.3878, lng: -2.9722, wave_type: "reef_break", difficulty: "expert" },
+  { name: "Hendaya (frontera)", location: "Hondarribia, Guipúzcoa", lat: 43.3722, lng: -1.7972, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Gaztetape", location: "Getaria, Guipúzcoa", lat: 43.3025, lng: -2.2031, wave_type: "reef_break", difficulty: "expert" },
+  { name: "Roka Puta - Punta Galea", location: "Getxo, Vizcaya", lat: 43.3789, lng: -3.0364, wave_type: "reef_break", difficulty: "expert" },
+  { name: "Deba", location: "Deba, Guipúzcoa", lat: 43.2950, lng: -2.3500, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Saturraran", location: "Mutriku, Guipúzcoa", lat: 43.3050, lng: -2.4039, wave_type: "beach_break", difficulty: "intermediate" },
+
+  // CANTABRIA extra
+  { name: "El Brusco", location: "Noja, Cantabria", lat: 43.4950, lng: -3.5689, wave_type: "beach_break", difficulty: "advanced" },
+  { name: "Berria", location: "Santoña, Cantabria", lat: 43.4742, lng: -3.4683, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Loredo", location: "Ribamontán al Mar, Cantabria", lat: 43.4592, lng: -3.7222, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Tagle (El Madero)", location: "Suances, Cantabria", lat: 43.4456, lng: -4.0683, wave_type: "reef_break", difficulty: "advanced" },
+  { name: "Usil", location: "Miengo, Cantabria", lat: 43.4458, lng: -3.9925, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Valdearenas", location: "Piélagos, Cantabria", lat: 43.4717, lng: -3.9633, wave_type: "beach_break", difficulty: "intermediate" },
+
+  // ASTURIAS extra
+  { name: "Vega", location: "Ribadesella, Asturias", lat: 43.4742, lng: -5.1339, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Aguilar", location: "Muros de Nalón, Asturias", lat: 43.5708, lng: -6.0958, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Otur", location: "Valdés, Asturias", lat: 43.5733, lng: -6.4889, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Cuevas del Mar", location: "Llanes, Asturias", lat: 43.4500, lng: -4.9056, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Penarronda", location: "Castropol, Asturias", lat: 43.5650, lng: -7.0500, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Bayas", location: "Castrillón, Asturias", lat: 43.5839, lng: -6.0036, wave_type: "beach_break", difficulty: "intermediate" },
+
+  // GALICIA extra
+  { name: "Nemiña", location: "Muxía, A Coruña", lat: 43.0167, lng: -9.2333, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Traba", location: "Laxe, A Coruña", lat: 43.2389, lng: -8.9667, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Caión", location: "A Laracha, A Coruña", lat: 43.3047, lng: -8.6125, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Malpica", location: "Malpica de Bergantiños, A Coruña", lat: 43.3231, lng: -8.8092, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Soesto", location: "Laxe, A Coruña", lat: 43.2356, lng: -9.0167, wave_type: "beach_break", difficulty: "advanced" },
+  { name: "Carnota", location: "Carnota, A Coruña", lat: 42.8333, lng: -9.0917, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Furnas", location: "Porto do Son, A Coruña", lat: 42.7333, lng: -9.0500, wave_type: "beach_break", difficulty: "advanced" },
+  { name: "Area Maior - Louro", location: "Muros, A Coruña", lat: 42.7625, lng: -9.1056, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Coído de Cuño", location: "Muxía, A Coruña", lat: 43.0500, lng: -9.2500, wave_type: "reef_break", difficulty: "advanced" },
+  { name: "O Rostro", location: "Fisterra, A Coruña", lat: 42.9417, lng: -9.2833, wave_type: "beach_break", difficulty: "advanced" },
+
+  // ANDALUCÍA extra
+  { name: "Castilnovo", location: "Conil, Cádiz", lat: 36.2611, lng: -6.0967, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Yerbabuena", location: "Barbate, Cádiz", lat: 36.1750, lng: -5.9333, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Punta Paloma", location: "Tarifa, Cádiz", lat: 36.0625, lng: -5.7283, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Valdevaqueros", location: "Tarifa, Cádiz", lat: 36.0550, lng: -5.7081, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Los Lances", location: "Tarifa, Cádiz", lat: 36.0211, lng: -5.6228, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Fuente del Gallo", location: "Conil, Cádiz", lat: 36.2783, lng: -6.1006, wave_type: "beach_break", difficulty: "intermediate" },
+
+  // CANARIAS extra
+  { name: "La Caleta", location: "La Caleta, Tenerife", lat: 28.1186, lng: -16.7861, wave_type: "reef_break", difficulty: "advanced" },
+  { name: "Igueste", location: "Santa Cruz, Tenerife", lat: 28.5333, lng: -16.1750, wave_type: "reef_break", difficulty: "expert" },
+  { name: "La Izquierda - Fuerteventura", location: "La Oliva, Fuerteventura", lat: 28.7333, lng: -14.0083, wave_type: "reef_break", difficulty: "expert" },
+  { name: "Punta Blanca", location: "La Oliva, Fuerteventura", lat: 28.7194, lng: -14.0250, wave_type: "reef_break", difficulty: "advanced" },
+  { name: "Majanicho", location: "La Oliva, Fuerteventura", lat: 28.7472, lng: -13.9667, wave_type: "reef_break", difficulty: "advanced" },
+  { name: "Lobos", location: "Isla de Lobos, Fuerteventura", lat: 28.7400, lng: -13.8181, wave_type: "point_break", difficulty: "advanced" },
+  { name: "La Pared", location: "Pájara, Fuerteventura", lat: 28.2125, lng: -14.2331, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "Esquinzo", location: "Pájara, Fuerteventura", lat: 28.1850, lng: -14.2611, wave_type: "beach_break", difficulty: "intermediate" },
+  { name: "San Juan", location: "La Santa, Lanzarote", lat: 29.0444, lng: -13.6611, wave_type: "reef_break", difficulty: "expert" },
+  { name: "La Caleta de Famara", location: "Teguise, Lanzarote", lat: 29.1147, lng: -13.5664, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Las Cucharas", location: "Costa Teguise, Lanzarote", lat: 29.0286, lng: -13.5097, wave_type: "reef_break", difficulty: "intermediate" },
+  { name: "La Derecha de los Alemanes", location: "La Santa, Lanzarote", lat: 29.0489, lng: -13.6594, wave_type: "reef_break", difficulty: "expert" },
+  { name: "Las Palmeras", location: "Las Palmas, Gran Canaria", lat: 28.1467, lng: -15.4356, wave_type: "reef_break", difficulty: "intermediate" },
+  { name: "El Frontón", location: "Gáldar, Gran Canaria", lat: 28.1583, lng: -15.6692, wave_type: "reef_break", difficulty: "expert" },
+  { name: "La Guancha", location: "Bañaderos, Gran Canaria", lat: 28.1583, lng: -15.5333, wave_type: "reef_break", difficulty: "advanced" },
+
+  // MEDITERRÁNEO extra
+  { name: "Pukas Surf Eskola - Somo", location: "Somo, Cantabria", lat: 43.4525, lng: -3.7286, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Pinedo", location: "Valencia", lat: 39.4136, lng: -0.3208, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Gavà", location: "Gavà, Barcelona", lat: 41.2697, lng: 2.0314, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Sitges", location: "Sitges, Barcelona", lat: 41.2347, lng: 1.8089, wave_type: "beach_break", difficulty: "beginner" },
+  { name: "Cabrera de Mar", location: "Cabrera de Mar, Barcelona", lat: 41.5208, lng: 2.3958, wave_type: "beach_break", difficulty: "beginner" },
 ];
 
 Deno.serve(async (req) => {
@@ -98,38 +173,50 @@ Deno.serve(async (req) => {
     let skipped = 0;
 
     for (const spot of SPAIN_SURF_SPOTS) {
-      // Check if spot already exists by playa_id_aemet or by name+location
-      const { data: existing } = await supabase
-        .from("surf_spots")
-        .select("id")
-        .or(`playa_id_aemet.eq.${spot.playa_id_aemet},and(name.eq.${spot.name},location.eq.${spot.location})`)
-        .limit(1);
+      // Check existing by playa_id_aemet (if set) OR by name+location
+      let existing: { id: string }[] | null = null;
+      if (spot.playa_id_aemet) {
+        const { data } = await supabase
+          .from("surf_spots")
+          .select("id")
+          .or(`playa_id_aemet.eq.${spot.playa_id_aemet},and(name.eq.${spot.name},location.eq.${spot.location})`)
+          .limit(1);
+        existing = data;
+      } else {
+        const { data } = await supabase
+          .from("surf_spots")
+          .select("id")
+          .eq("name", spot.name)
+          .eq("location", spot.location)
+          .limit(1);
+        existing = data;
+      }
+
+      const sourceTag = spot.playa_id_aemet ? "aemet" : "stormglass";
 
       if (existing && existing.length > 0) {
-        // Update existing with AEMET data
         await supabase
           .from("surf_spots")
           .update({
-            playa_id_aemet: spot.playa_id_aemet,
+            playa_id_aemet: spot.playa_id_aemet ?? null,
             lat: spot.lat,
             lng: spot.lng,
             wave_type: spot.wave_type,
             difficulty: spot.difficulty,
-            source: "aemet",
+            source: sourceTag,
           })
           .eq("id", existing[0].id);
         skipped++;
       } else {
-        // Insert new spot
         const { error } = await supabase.from("surf_spots").insert({
           name: spot.name,
           location: spot.location,
           lat: spot.lat,
           lng: spot.lng,
-          playa_id_aemet: spot.playa_id_aemet,
+          playa_id_aemet: spot.playa_id_aemet ?? null,
           wave_type: spot.wave_type,
           difficulty: spot.difficulty,
-          source: "aemet",
+          source: sourceTag,
           approved: true,
         });
         if (!error) inserted++;

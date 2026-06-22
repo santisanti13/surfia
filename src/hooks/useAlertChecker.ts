@@ -73,14 +73,14 @@ export function useAlertChecker() {
     // Check each alert against current conditions
     for (const alert of alerts as AlertCheck[]) {
       const spot = spots.find((s: SpotInfo) => s.id === alert.spot_id);
-      if (!spot || !spot.playa_id_aemet) continue;
+      if (!spot) continue;
 
       // Skip if already notified in this session
       if (notifiedRef.current.has(alert.id)) continue;
 
       try {
         const { data: weather } = await supabase.functions.invoke("aemet-weather", {
-          body: { playa_id: spot.playa_id_aemet },
+          body: { playa_id: spot.playa_id_aemet ?? undefined, lat: spot.lat, lng: spot.lng },
         });
 
         if (!weather || weather.error) continue;

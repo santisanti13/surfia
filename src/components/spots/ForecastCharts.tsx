@@ -28,6 +28,8 @@ interface ForecastResponse {
 interface ForecastChartsProps {
   spotName: string;
   playaIdAemet?: string | null;
+  lat?: number;
+  lng?: number;
 }
 
 function generateFallbackData(): ChartPoint[] {
@@ -76,22 +78,24 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
+const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProps) => {
   const [data, setData] = useState<ChartPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [isReal, setIsReal] = useState(false);
+  const [source, setSource] = useState<string>("");
 
   useEffect(() => {
     const fetchForecast = async () => {
       setLoading(true);
-      if (playaIdAemet) {
+      if (playaIdAemet || (lat != null && lng != null)) {
         try {
           const { data: res, error } = await supabase.functions.invoke("aemet-forecast", {
-            body: { playa_id: playaIdAemet },
+            body: { playa_id: playaIdAemet ?? undefined, lat, lng },
           });
           if (!error && res && !res.error && res.chartData?.length > 0) {
             setData(res.chartData);
             setIsReal(true);
+            setSource(res.source || "");
             setLoading(false);
             return;
           }
@@ -102,7 +106,7 @@ const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
       setLoading(false);
     };
     fetchForecast();
-  }, [playaIdAemet]);
+  }, [playaIdAemet, lat, lng]);
 
   // Estimate period from wave height (rough approximation since AEMET doesn't provide it for beaches)
   const dataWithPeriod = useMemo(() =>
@@ -132,13 +136,13 @@ const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
 
       {isReal && (
         <div className="flex items-center gap-2 text-[10px] text-primary bg-primary/10 rounded-lg p-2 border border-primary/20">
-          <span className="font-body">✓ Datos AEMET en tiempo real · Previsión {data.length > 4 ? "3 días" : "24h"}</span>
+          <span className="font-body">✓ Datos {source === "stormglass" ? "Stormglass" : "AEMET"} en tiempo real · Previsión {data.length > 4 ? "3 días" : "24h"}</span>
         </div>
       )}
 
       <div>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body mb-2">
-          Oleaje · {isReal ? "AEMET" : "simulado"}
+          Oleaje · {isReal ? (source === "stormglass" ? "Stormglass" : "AEMET") : "simulado"}
         </p>
         <div className="bg-card/40 rounded-xl border border-border/20 p-3">
           <ResponsiveContainer width="100%" height={100}>
@@ -160,7 +164,7 @@ const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
 
       <div>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body mb-2">
-          Viento · {isReal ? "AEMET" : "simulado"}
+          Viento · {isReal ? (source === "stormglass" ? "Stormglass" : "AEMET") : "simulado"}
         </p>
         <div className="bg-card/40 rounded-xl border border-border/20 p-3">
           <ResponsiveContainer width="100%" height={80}>
@@ -182,7 +186,7 @@ const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
 
       <div>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body mb-2">
-          Periodo estimado · {isReal ? "AEMET" : "simulado"}
+          Periodo estimado · {isReal ? (source === "stormglass" ? "Stormglass" : "AEMET") : "simulado"}
         </p>
         <div className="bg-card/40 rounded-xl border border-border/20 p-3">
           <ResponsiveContainer width="100%" height={80}>

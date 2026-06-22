@@ -102,16 +102,14 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
     const fetchWeather = async () => {
       setLoading(true);
       try {
-        if (spot.playa_id_aemet) {
-          const { data, error } = await supabase.functions.invoke("aemet-weather", {
-            body: { playa_id: spot.playa_id_aemet },
-          });
-          if (!error && data && !data.error) {
-            setWeather(data);
-            setUsingMock(false);
-            setLoading(false);
-            return;
-          }
+        const { data, error } = await supabase.functions.invoke("aemet-weather", {
+          body: { playa_id: spot.playa_id_aemet ?? undefined, lat: spot.lat, lng: spot.lng },
+        });
+        if (!error && data && !data.error) {
+          setWeather(data);
+          setUsingMock(false);
+          setLoading(false);
+          return;
         }
       } catch { /* fallback */ }
       setWeather(generateMockWeather());
@@ -242,7 +240,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
 
             {showForecast && (
               <div className="mb-5">
-                <ForecastCharts spotName={spot.name} playaIdAemet={spot.playa_id_aemet} />
+                <ForecastCharts spotName={spot.name} playaIdAemet={spot.playa_id_aemet} lat={spot.lat} lng={spot.lng} />
               </div>
             )}
 
