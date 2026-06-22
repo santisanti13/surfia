@@ -1,4 +1,10 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import {
+  getSpotByPlayaId,
+  fetchStormglassHours,
+  degToCompass,
+  surfScore,
+} from "../_shared/stormglass.ts";
 
 function extractValue(obj: unknown): string {
   if (obj === null || obj === undefined) return "N/D";
@@ -58,6 +64,42 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ===== 1) Try Stormglass first =====
+    const spot = await getSpotByPlayaId(playa_id);
+    if (spot) {
+      const hours = await fetchStormglassHours(spot.lat, spot.lng, 6);
+      if (hours && hours.length > 0) {
+        const h = hours[0];
+        const waveHeight = h.waveHeight ?? 0;
+        const windSpeedKmh = (h.windSpeed ?? 0) * 3.6; // m/s -> km/h
+        const result = {
+          source: "stormglass",
+          oleaje: {
+            altura: `${waveHeight.toFixed(1)}m`,
+            periodo: h.wavePeriod != null ? `${h.wavePeriod.toFixed(0)}s` : "N/D",
+            direccion: degToCompass(h.waveDirection),
+          },
+          viento: {
+            velocidad: `${Math.round(windSpeedKmh)} km/h`,
+            direccion: degToCompass(h.windDirection),
+          },
+          temperatura: {
+            agua: h.waterTemperature != null ? `${h.waterTemperature.toFixed(1)}°C` : "N/D",
+            max: h.airTemperature != null ? `${h.airTemperature.toFixed(1)}°C` : "N/D",
+            min: "N/D",
+          },
+          uv: "N/D",
+          estado_cielo: "N/D",
+          sensacion_termica: "N/D",
+          score: surfScore(waveHeight, windSpeedKmh),
+        };
+        return new Response(JSON.stringify(result), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    // ===== 2) Fallback to AEMET =====
     const apiKey = Deno.env.get("AEMET_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AEMET API key not configured" }), {
@@ -148,6 +190,7 @@ Deno.serve(async (req) => {
     score = Math.max(1, Math.min(10, score));
 
     const result = {
+      source: "aemet",
       oleaje: {
         altura: `${waveHeight}m`,
         periodo: "N/D",
