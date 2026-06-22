@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Alerts from "./pages/Alerts";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
+import Trust from "./pages/Trust";
 import AlertCheckerProvider from "./components/AlertCheckerProvider";
 
 const queryClient = new QueryClient();
