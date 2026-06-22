@@ -144,6 +144,53 @@ Deno.serve(async (req) => {
       });
     }
 
+    // ===== 1) Try Stormglass first =====
+    const spot = await getSpotByPlayaId(playa_id);
+    if (spot) {
+      const hours = await fetchStormglassHours(spot.lat, spot.lng, 72);
+      if (hours && hours.length > 0) {
+        const dayNames = ["Hoy", "Mañana", "Pasado"];
+        const startMs = Date.now();
+        const chartData = hours
+          .filter((_, i) => i % 3 === 0) // every 3h to keep chart readable
+          .map((h) => {
+            const t = new Date(h.time);
+            const dayIndex = Math.min(
+              2,
+              Math.floor((t.getTime() - startMs) / (24 * 3600 * 1000)),
+            );
+            const hour = t.getHours();
+            const wave = h.waveHeight ?? 0;
+            const wind = (h.windSpeed ?? 0) * 3.6;
+            return {
+              label: `${dayNames[Math.max(0, dayIndex)] ?? "Día"} ${String(hour).padStart(2, "0")}:00`,
+              hour,
+              dayIndex: Math.max(0, dayIndex),
+              waveHeight: Number(wave.toFixed(2)),
+              windSpeed: Math.round(wind),
+              waveDesc: `${wave.toFixed(1)}m`,
+              windDesc: `${Math.round(wind)} km/h`,
+              skyDesc: "",
+            };
+          });
+        const first = hours[0];
+        const result = {
+          source: "stormglass",
+          chartData,
+          general: {
+            tAgua: first.waterTemperature != null ? `${first.waterTemperature.toFixed(1)}°C` : "N/D",
+            tMax: first.airTemperature != null ? `${first.airTemperature.toFixed(1)}°C` : "N/D",
+            uvMax: "N/D",
+          },
+          daysCount: 3,
+        };
+        return new Response(JSON.stringify(result), {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
+    // ===== 2) Fallback to AEMET =====
     const apiKey = Deno.env.get("AEMET_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AEMET API key not configured" }), {
