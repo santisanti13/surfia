@@ -136,13 +136,13 @@ const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProp
 
       {isReal && (
         <div className="flex items-center gap-2 text-[10px] text-primary bg-primary/10 rounded-lg p-2 border border-primary/20">
-          <span className="font-body">✓ Datos AEMET en tiempo real · Previsión {data.length > 4 ? "3 días" : "24h"}</span>
+          <span className="font-body">✓ Datos {source === "stormglass" ? "Stormglass" : "AEMET"} en tiempo real · Previsión {data.length > 4 ? "3 días" : "24h"}</span>
         </div>
       )}
 
       <div>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body mb-2">
-          Oleaje · {isReal ? "AEMET" : "simulado"}
+          Oleaje · {isReal ? (source === "stormglass" ? "Stormglass" : "AEMET") : "simulado"}
         </p>
         <div className="bg-card/40 rounded-xl border border-border/20 p-3">
           <ResponsiveContainer width="100%" height={100}>
@@ -164,7 +164,7 @@ const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProp
 
       <div>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body mb-2">
-          Viento · {isReal ? "AEMET" : "simulado"}
+          Viento · {isReal ? (source === "stormglass" ? "Stormglass" : "AEMET") : "simulado"}
         </p>
         <div className="bg-card/40 rounded-xl border border-border/20 p-3">
           <ResponsiveContainer width="100%" height={80}>
@@ -186,7 +186,7 @@ const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProp
 
       <div>
         <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body mb-2">
-          Periodo estimado · {isReal ? "AEMET" : "simulado"}
+          Periodo estimado · {isReal ? (source === "stormglass" ? "Stormglass" : "AEMET") : "simulado"}
         </p>
         <div className="bg-card/40 rounded-xl border border-border/20 p-3">
           <ResponsiveContainer width="100%" height={80}>
