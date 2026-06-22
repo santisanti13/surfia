@@ -173,38 +173,50 @@ Deno.serve(async (req) => {
     let skipped = 0;
 
     for (const spot of SPAIN_SURF_SPOTS) {
-      // Check if spot already exists by playa_id_aemet or by name+location
-      const { data: existing } = await supabase
-        .from("surf_spots")
-        .select("id")
-        .or(`playa_id_aemet.eq.${spot.playa_id_aemet},and(name.eq.${spot.name},location.eq.${spot.location})`)
-        .limit(1);
+      // Check existing by playa_id_aemet (if set) OR by name+location
+      let existing: { id: string }[] | null = null;
+      if (spot.playa_id_aemet) {
+        const { data } = await supabase
+          .from("surf_spots")
+          .select("id")
+          .or(`playa_id_aemet.eq.${spot.playa_id_aemet},and(name.eq.${spot.name},location.eq.${spot.location})`)
+          .limit(1);
+        existing = data;
+      } else {
+        const { data } = await supabase
+          .from("surf_spots")
+          .select("id")
+          .eq("name", spot.name)
+          .eq("location", spot.location)
+          .limit(1);
+        existing = data;
+      }
+
+      const sourceTag = spot.playa_id_aemet ? "aemet" : "stormglass";
 
       if (existing && existing.length > 0) {
-        // Update existing with AEMET data
         await supabase
           .from("surf_spots")
           .update({
-            playa_id_aemet: spot.playa_id_aemet,
+            playa_id_aemet: spot.playa_id_aemet ?? null,
             lat: spot.lat,
             lng: spot.lng,
             wave_type: spot.wave_type,
             difficulty: spot.difficulty,
-            source: "aemet",
+            source: sourceTag,
           })
           .eq("id", existing[0].id);
         skipped++;
       } else {
-        // Insert new spot
         const { error } = await supabase.from("surf_spots").insert({
           name: spot.name,
           location: spot.location,
           lat: spot.lat,
           lng: spot.lng,
-          playa_id_aemet: spot.playa_id_aemet,
+          playa_id_aemet: spot.playa_id_aemet ?? null,
           wave_type: spot.wave_type,
           difficulty: spot.difficulty,
-          source: "aemet",
+          source: sourceTag,
           approved: true,
         });
         if (!error) inserted++;
