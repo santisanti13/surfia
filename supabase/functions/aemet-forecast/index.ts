@@ -284,6 +284,7 @@ Deno.serve(async (req) => {
     const uvMax = safeString(today.uvMax);
 
     const result = {
+      source: "aemet",
       chartData,
       general: {
         tAgua: tAgua || "N/D",
