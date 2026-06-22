@@ -190,6 +190,7 @@ Deno.serve(async (req) => {
     score = Math.max(1, Math.min(10, score));
 
     const result = {
+      source: "aemet",
       oleaje: {
         altura: `${waveHeight}m`,
         periodo: "N/D",
