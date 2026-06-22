@@ -195,10 +195,17 @@ const Spots = () => {
         ? `<br/><span style="color: hsl(185, 72%, 42%); font-size: 11px; font-weight: 600;">${getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km</span>`
         : "";
 
+      const escapeHtml = (s: string) =>
+        String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
       marker.bindPopup(
         `<div style="font-family: Inter, sans-serif;">
-          <b style="font-size: 13px;">${spot.name}</b><br/>
-          <span style="font-size: 11px; opacity: 0.7;">${spot.location}</span>
+          <b style="font-size: 13px;">${escapeHtml(spot.name)}</b><br/>
+          <span style="font-size: 11px; opacity: 0.7;">${escapeHtml(spot.location)}</span>
           ${distText}
         </div>`
       );
