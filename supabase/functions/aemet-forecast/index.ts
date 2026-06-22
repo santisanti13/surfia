@@ -1,4 +1,5 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import { getSpotByPlayaId, fetchStormglassHours } from "../_shared/stormglass.ts";
 
 // AEMET beach forecasts provide data in periods per day:
 // Periods: "00-06", "06-12", "12-18", "18-24" (or "00-24" for full day)
