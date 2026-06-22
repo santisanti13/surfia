@@ -28,6 +28,8 @@ interface ForecastResponse {
 interface ForecastChartsProps {
   spotName: string;
   playaIdAemet?: string | null;
+  lat?: number;
+  lng?: number;
 }
 
 function generateFallbackData(): ChartPoint[] {
@@ -76,22 +78,24 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
+const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProps) => {
   const [data, setData] = useState<ChartPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [isReal, setIsReal] = useState(false);
+  const [source, setSource] = useState<string>("");
 
   useEffect(() => {
     const fetchForecast = async () => {
       setLoading(true);
-      if (playaIdAemet) {
+      if (playaIdAemet || (lat != null && lng != null)) {
         try {
           const { data: res, error } = await supabase.functions.invoke("aemet-forecast", {
-            body: { playa_id: playaIdAemet },
+            body: { playa_id: playaIdAemet ?? undefined, lat, lng },
           });
           if (!error && res && !res.error && res.chartData?.length > 0) {
             setData(res.chartData);
             setIsReal(true);
+            setSource(res.source || "");
             setLoading(false);
             return;
           }
@@ -102,7 +106,7 @@ const ForecastCharts = ({ spotName, playaIdAemet }: ForecastChartsProps) => {
       setLoading(false);
     };
     fetchForecast();
-  }, [playaIdAemet]);
+  }, [playaIdAemet, lat, lng]);
 
   // Estimate period from wave height (rough approximation since AEMET doesn't provide it for beaches)
   const dataWithPeriod = useMemo(() =>
