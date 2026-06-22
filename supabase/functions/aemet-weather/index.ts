@@ -1,4 +1,10 @@
 import { corsHeaders } from "../_shared/cors.ts";
+import {
+  getSpotByPlayaId,
+  fetchStormglassHours,
+  degToCompass,
+  surfScore,
+} from "../_shared/stormglass.ts";
 
 function extractValue(obj: unknown): string {
   if (obj === null || obj === undefined) return "N/D";
