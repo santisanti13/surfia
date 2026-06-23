@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Waves, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import Seo from "@/components/Seo";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
