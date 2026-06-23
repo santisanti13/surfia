@@ -68,6 +68,10 @@ const Index = () => {
           <img
             src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=2070&auto=format&fit=crop"
             alt="Surfer catching a wave"
+            width={2070}
+            height={1380}
+            fetchPriority="high"
+            decoding="async"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/40 to-background" />
