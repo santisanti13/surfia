@@ -248,6 +248,9 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
               </div>
             )}
 
+            {/* Live check-ins (real-time) */}
+            <SpotCheckinLive spotId={spot.id} spotName={spot.name} />
+
             {/* Tabs: Info / Fotos / Reseñas */}
             <div className="flex gap-1 bg-card/40 rounded-xl border border-border/20 p-1 mb-4">
               {(["info", "photos", "reviews"] as const).map((tab) => (
