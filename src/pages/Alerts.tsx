@@ -11,6 +11,7 @@ import { Bell, Plus, Trash2, Waves, Wind, MapPin, Navigation, Loader2, ArrowLeft
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import Seo from "@/components/Seo";
 
 interface SurfSpot {
   id: string;
