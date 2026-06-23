@@ -1,0 +1,16 @@
+# SURFIA
+
+> Previsión de surf en tiempo real para los spots de España, con puntuaciones generadas por IA a partir de datos de oleaje, viento y mareas.
+
+SURFIA combina datos oficiales de AEMET y Stormglass con un motor de puntuación propio para ayudar a surfistas a encontrar las mejores olas en cada momento. Incluye más de 60 spots curados en la costa española, alertas geolocalizadas y una comunidad que añade reseñas y fotos.
+
+## Pages
+
+- [Inicio](/): Qué es SURFIA y cómo funciona la previsión de olas con IA.
+- [Spots](/spots): Mapa interactivo con todos los spots de surf de España, filtros por dificultad, tipo de ola y distancia, y condiciones en tiempo real.
+- [Alertas](/alerts): Crea alertas personalizadas para recibir avisos cuando haya buenas condiciones en tus spots favoritos.
+- [Trust & Security](/trust): Política de seguridad, privacidad y manejo de datos.
+
+## Blog
+
+- [Cómo leer previsiones de surf](/blog/como-leer-previsiones-surf): Guía para interpretar altura, periodo y dirección del oleaje, viento y mareas.
