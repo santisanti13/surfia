@@ -99,14 +99,42 @@ const Spots = () => {
 
   useEffect(() => { fetchSpots(); }, [fetchSpots]);
 
+  // Restore last known position so the list stays sorted between visits
   useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setUserPos([pos.coords.latitude, pos.coords.longitude]),
-        () => setGeoError("Activa la geolocalización para ver spots cercanos"),
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
+    try {
+      const saved = localStorage.getItem("surfia:userPos");
+      if (saved) {
+        const parsed = JSON.parse(saved) as [number, number];
+        if (Array.isArray(parsed) && parsed.length === 2) setUserPos(parsed);
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  const requestLocation = useCallback(() => {
+    if (!("geolocation" in navigator)) {
+      toast.error("Tu navegador no soporta geolocalización");
+      return;
     }
+    setGeoLoading(true);
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserPos(coords);
+        try { localStorage.setItem("surfia:userPos", JSON.stringify(coords)); } catch { /* ignore */ }
+        setGeoLoading(false);
+        toast.success("Ubicación actualizada — spots ordenados por distancia");
+      },
+      (err) => {
+        setGeoLoading(false);
+        const msg = err.code === err.PERMISSION_DENIED
+          ? "Permiso denegado. Actívalo en los ajustes del navegador."
+          : "No se pudo obtener tu ubicación. Inténtalo de nuevo.";
+        setGeoError(msg);
+        toast.error(msg);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
   }, []);
 
   // Initialize map
