@@ -138,12 +138,15 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
         <div className="absolute top-4 right-4 flex gap-2">
           <button
             onClick={toggleFavorite}
+            aria-label={isFavorite ? `Quitar ${spot.name} de favoritos` : `Añadir ${spot.name} a favoritos`}
+            aria-pressed={isFavorite}
             className="w-9 h-9 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors shadow-sm"
           >
             <Heart className={`h-4 w-4 ${isFavorite ? "fill-destructive text-destructive" : ""}`} />
           </button>
           <button
             onClick={onClose}
+            aria-label="Cerrar panel del spot"
             className="w-9 h-9 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors shadow-sm"
           >
             <X className="h-4 w-4" />
