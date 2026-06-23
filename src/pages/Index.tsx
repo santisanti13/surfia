@@ -55,6 +55,11 @@ const fadeUp = {
 const Index = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <Seo
+        title="SurfIA — Previsión de surf en tiempo real en España"
+        description="Encuentra olas allá donde estés. Previsión de oleaje, viento y mareas en tiempo real para los mejores spots de surf de España, con alertas inteligentes."
+        path="/"
+      />
       <Navbar />
 
       {/* Hero */}
