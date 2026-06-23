@@ -78,6 +78,7 @@ const Spots = () => {
   const [showSuggestForm, setShowSuggestForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [geoError, setGeoError] = useState<string | null>(null);
+  const [geoLoading, setGeoLoading] = useState(false);
   const [activeLayer, setActiveLayer] = useState<LayerType>("streets");
   const [showHeatMap, setShowHeatMap] = useState(false);
   
