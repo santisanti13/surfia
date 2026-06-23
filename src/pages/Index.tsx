@@ -115,7 +115,7 @@ const Index = () => {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-foreground/50"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-muted-foreground"
         >
           <ChevronDown className="h-8 w-8" />
         </motion.div>

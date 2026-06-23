@@ -133,7 +133,7 @@ const SpotReviews = ({ spotId }: SpotReviewsProps) => {
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
             placeholder="¿Cómo fue tu sesión?"
-            className="w-full bg-transparent border border-border/30 rounded-lg p-2 text-xs font-body resize-none h-16 focus:outline-none focus:ring-1 focus:ring-primary/50 placeholder:text-muted-foreground/50"
+            className="w-full bg-transparent border border-border/30 rounded-lg p-2 text-xs font-body resize-none h-16 focus:outline-none focus:ring-1 focus:ring-primary/50 placeholder:text-muted-foreground"
           />
           <div className="flex gap-2">
             <Button size="sm" className="h-7 text-xs gap-1 flex-1" onClick={handleSubmit} disabled={submitting || newRating === 0}>
