@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import SpotCard from "@/components/SpotCard";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 const spots = [
   {
