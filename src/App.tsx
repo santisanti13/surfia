@@ -11,6 +11,7 @@ import Alerts from "./pages/Alerts";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Trust from "./pages/Trust";
+import ComoLeerPrevisionesSurf from "./pages/blog/ComoLeerPrevisionesSurf";
 import AlertCheckerProvider from "./components/AlertCheckerProvider";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/trust" element={<Trust />} />
+            <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
