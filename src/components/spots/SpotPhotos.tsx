@@ -109,7 +109,7 @@ const SpotPhotos = ({ spotId }: SpotPhotosProps) => {
           <Camera className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
           <p className="text-xs text-muted-foreground font-body">Aún no hay fotos</p>
           {user && (
-            <p className="text-[10px] text-muted-foreground/60 font-body mt-1">Sé el primero en subir una</p>
+            <p className="text-[10px] text-muted-foreground font-body mt-1">Sé el primero en subir una</p>
           )}
         </div>
       ) : (
