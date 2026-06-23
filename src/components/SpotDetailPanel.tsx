@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import ForecastCharts from "@/components/spots/ForecastCharts";
 import SpotPhotos from "@/components/spots/SpotPhotos";
 import SpotReviews from "@/components/spots/SpotReviews";
+import SpotCheckinLive from "@/components/spots/SpotCheckinLive";
 
 interface SurfSpot {
   id: string;
