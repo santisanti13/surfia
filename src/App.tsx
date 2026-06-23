@@ -31,6 +31,7 @@ const App = () => (
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/trust" element={<Trust />} />
+            <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
