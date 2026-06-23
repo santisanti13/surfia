@@ -81,6 +81,7 @@ const Index = () => {
             className="text-[8rem] md:text-[12rem] leading-none font-display tracking-tight text-primary"
           >
             SURFIA
+            <span className="sr-only"> — Previsión de surf en tiempo real en España</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
