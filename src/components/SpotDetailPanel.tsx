@@ -297,18 +297,21 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
 
             {/* Action buttons */}
             <div className="space-y-2">
-              {userPos && (
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Button variant="hero" className="w-full rounded-xl">
-                    <Navigation className="h-4 w-4 mr-2" />
-                    Cómo llegar
-                  </Button>
-                </a>
-              )}
+              <a
+                href={
+                  userPos
+                    ? `https://www.google.com/maps/dir/?api=1&origin=${userPos[0]},${userPos[1]}&destination=${spot.lat},${spot.lng}&travelmode=driving`
+                    : `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}&travelmode=driving`
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Abrir ruta a ${spot.name} en Google Maps`}
+              >
+                <Button variant="hero" className="w-full rounded-xl">
+                  <Navigation className="h-4 w-4 mr-2" />
+                  {userPos ? "Ir con Google Maps" : "Abrir en Google Maps"}
+                </Button>
+              </a>
               <Link to="/alerts">
                 <Button variant="outline" className="w-full rounded-xl mt-2">
                   <Bell className="h-4 w-4 mr-2" />
