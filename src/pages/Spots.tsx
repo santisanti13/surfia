@@ -5,7 +5,8 @@ import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Flame } from "lucide-react";
+import { Loader2, Plus, Flame, LocateFixed } from "lucide-react";
+import { toast } from "sonner";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import SpotDetailPanel from "@/components/SpotDetailPanel";
@@ -77,6 +78,7 @@ const Spots = () => {
   const [showSuggestForm, setShowSuggestForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [geoError, setGeoError] = useState<string | null>(null);
+  const [geoLoading, setGeoLoading] = useState(false);
   const [activeLayer, setActiveLayer] = useState<LayerType>("streets");
   const [showHeatMap, setShowHeatMap] = useState(false);
   
@@ -97,14 +99,42 @@ const Spots = () => {
 
   useEffect(() => { fetchSpots(); }, [fetchSpots]);
 
+  // Restore last known position so the list stays sorted between visits
   useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => setUserPos([pos.coords.latitude, pos.coords.longitude]),
-        () => setGeoError("Activa la geolocalización para ver spots cercanos"),
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
+    try {
+      const saved = localStorage.getItem("surfia:userPos");
+      if (saved) {
+        const parsed = JSON.parse(saved) as [number, number];
+        if (Array.isArray(parsed) && parsed.length === 2) setUserPos(parsed);
+      }
+    } catch { /* ignore */ }
+  }, []);
+
+  const requestLocation = useCallback(() => {
+    if (!("geolocation" in navigator)) {
+      toast.error("Tu navegador no soporta geolocalización");
+      return;
     }
+    setGeoLoading(true);
+    setGeoError(null);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserPos(coords);
+        try { localStorage.setItem("surfia:userPos", JSON.stringify(coords)); } catch { /* ignore */ }
+        setGeoLoading(false);
+        toast.success("Ubicación actualizada — spots ordenados por distancia");
+      },
+      (err) => {
+        setGeoLoading(false);
+        const msg = err.code === err.PERMISSION_DENIED
+          ? "Permiso denegado. Actívalo en los ajustes del navegador."
+          : "No se pudo obtener tu ubicación. Inténtalo de nuevo.";
+        setGeoError(msg);
+        toast.error(msg);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
   }, []);
 
   // Initialize map
@@ -304,6 +334,23 @@ const Spots = () => {
               </button>
             </div>
 
+            {/* Locate me button — Desktop */}
+            <div className="hidden md:block absolute top-[180px] right-4 z-[1000]">
+              <button
+                onClick={requestLocation}
+                disabled={geoLoading}
+                aria-label="Centrar mapa en mi ubicación"
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl border shadow-lg font-body text-xs font-bold transition-all duration-300 backdrop-blur-xl w-[100px] justify-center ${
+                  userPos
+                    ? "bg-primary text-primary-foreground border-transparent hover:opacity-90"
+                    : "bg-background/90 text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground"
+                } disabled:opacity-60`}
+              >
+                {geoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}
+                <span>{userPos ? "Cerca de ti" : "Ubicarme"}</span>
+              </button>
+            </div>
+
             {/* Mobile layer control & heat map toggle */}
             <div className="absolute top-3 right-3 z-[1000] md:hidden flex flex-col gap-2">
               <button
@@ -324,6 +371,19 @@ const Spots = () => {
                 }`}
               >
                 <Flame className={`h-4 w-4 ${showHeatMap ? 'animate-pulse' : ''}`} />
+              </button>
+
+              <button
+                onClick={requestLocation}
+                disabled={geoLoading}
+                aria-label="Centrar mapa en mi ubicación"
+                className={`w-9 h-9 rounded-xl border shadow-lg flex items-center justify-center transition-all duration-300 backdrop-blur-xl disabled:opacity-60 ${
+                  userPos
+                    ? "bg-primary text-primary-foreground border-transparent"
+                    : "bg-background/90 text-muted-foreground border-border/50"
+                }`}
+              >
+                {geoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}
               </button>
             </div>
 
