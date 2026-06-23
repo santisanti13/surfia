@@ -123,7 +123,9 @@ const Spots = () => {
         setUserPos(coords);
         try { localStorage.setItem("surfia:userPos", JSON.stringify(coords)); } catch { /* ignore */ }
         setGeoLoading(false);
-        toast.success("Ubicación actualizada — spots ordenados por distancia");
+        // Auto-apply a default radius filter (50 km) if the user hasn't set one
+        setFilters((prev) => prev.maxDistance === null ? { ...prev, maxDistance: 50 } : prev);
+        toast.success("Ubicación lista — mostrando playas a menos de 50 km");
       },
       (err) => {
         setGeoLoading(false);
