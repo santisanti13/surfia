@@ -70,6 +70,41 @@ export type Database = {
         }
         Relationships: []
       }
+      spot_checkins: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          note: string | null
+          spot_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          note?: string | null
+          spot_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          note?: string | null
+          spot_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "spot_checkins_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "surf_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       spot_photos: {
         Row: {
           caption: string | null
