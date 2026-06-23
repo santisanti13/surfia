@@ -16,6 +16,11 @@ const Section = ({ icon: Icon, title, children }: { icon: any; title: string; ch
 const Trust = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Seo
+        title="Confianza, seguridad y privacidad — SurfIA"
+        description="Cómo SurfIA protege tus datos: cifrado, autenticación segura, política de privacidad y prácticas de seguridad de la plataforma."
+        path="/trust"
+      />
       <header className="border-b border-border/50 px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
