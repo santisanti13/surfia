@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import ForecastCharts from "@/components/spots/ForecastCharts";
 import SpotPhotos from "@/components/spots/SpotPhotos";
 import SpotReviews from "@/components/spots/SpotReviews";
+import SpotCheckinLive from "@/components/spots/SpotCheckinLive";
 
 interface SurfSpot {
   id: string;
@@ -246,6 +247,9 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
                 <ForecastCharts spotName={spot.name} playaIdAemet={spot.playa_id_aemet} lat={spot.lat} lng={spot.lng} />
               </div>
             )}
+
+            {/* Live check-ins (real-time) */}
+            <SpotCheckinLive spotId={spot.id} spotName={spot.name} />
 
             {/* Tabs: Info / Fotos / Reseñas */}
             <div className="flex gap-1 bg-card/40 rounded-xl border border-border/20 p-1 mb-4">
