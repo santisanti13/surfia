@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Waves, ShieldCheck, Lock, Database, Mail } from "lucide-react";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 const Section = ({ icon: Icon, title, children }: { icon: any; title: string; children: React.ReactNode }) => (
   <section className="border border-border/60 rounded-xl p-6 bg-card">
@@ -15,6 +16,11 @@ const Section = ({ icon: Icon, title, children }: { icon: any; title: string; ch
 const Trust = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Seo
+        title="Confianza, seguridad y privacidad — SurfIA"
+        description="Cómo SurfIA protege tus datos: cifrado, autenticación segura, política de privacidad y prácticas de seguridad de la plataforma."
+        path="/trust"
+      />
       <header className="border-b border-border/50 px-4 py-4">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">

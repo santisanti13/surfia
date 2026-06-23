@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import SpotCard from "@/components/SpotCard";
 import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
 
 const spots = [
   {
@@ -54,6 +55,11 @@ const fadeUp = {
 const Index = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <Seo
+        title="SurfIA — Previsión de surf en tiempo real en España"
+        description="Encuentra olas allá donde estés. Previsión de oleaje, viento y mareas en tiempo real para los mejores spots de surf de España, con alertas inteligentes."
+        path="/"
+      />
       <Navbar />
 
       {/* Hero */}
@@ -75,6 +81,7 @@ const Index = () => {
             className="text-[8rem] md:text-[12rem] leading-none font-display tracking-tight text-primary"
           >
             SURFIA
+            <span className="sr-only"> — Previsión de surf en tiempo real en España</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

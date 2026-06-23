@@ -18,6 +18,7 @@ import HeatMapOverlay from "@/components/spots/HeatMapOverlay";
 import { type SpotFilters, emptyFilters } from "@/components/spots/SpotFiltersBar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import Seo from "@/components/Seo";
 
 interface SurfSpot {
   id: string;
@@ -234,6 +235,12 @@ const Spots = () => {
 
   return (
     <div className="h-screen w-screen bg-background flex flex-col">
+      <Seo
+        title="Mapa de spots de surf en España — SurfIA"
+        description="Mapa interactivo con cientos de spots de surf en España. Consulta oleaje, viento y mareas en tiempo real para encontrar las mejores olas cerca de ti."
+        path="/spots"
+        jsonLd={{ "@context": "https://schema.org", "@type": "CollectionPage", name: "Spots de surf en España", url: "https://surfiaa.com/spots" }}
+      />
       <Navbar />
       <div className="flex-1 relative mt-16">
         {loading ? (

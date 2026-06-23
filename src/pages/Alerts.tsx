@@ -11,6 +11,7 @@ import { Bell, Plus, Trash2, Waves, Wind, MapPin, Navigation, Loader2, ArrowLeft
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
+import Seo from "@/components/Seo";
 
 interface SurfSpot {
   id: string;
@@ -124,6 +125,11 @@ const Alerts = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title="Alertas de surf inteligentes — SurfIA"
+        description="Configura alertas personalizadas y recibe notificaciones cuando tu spot favorito tenga las condiciones perfectas de oleaje y viento."
+        path="/alerts"
+      />
       <Navbar />
       <div className="pt-20 px-4 max-w-2xl mx-auto pb-12">
         <div className="flex items-center justify-between mb-8">

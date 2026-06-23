@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://surfia.app/sitemap.xml
+Sitemap: https://surfiaa.com/sitemap.xml

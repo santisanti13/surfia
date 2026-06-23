@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Waves, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import Seo from "@/components/Seo";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -58,6 +59,11 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
+      <Seo
+        title="Iniciar sesión o registrarse — SurfIA"
+        description="Accede a tu cuenta de SurfIA para guardar tus spots favoritos y recibir alertas personalizadas de oleaje y viento."
+        path="/auth"
+      />
       <div className="w-full max-w-md">
         <Link to="/" className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
           <ArrowLeft className="h-4 w-4" />
