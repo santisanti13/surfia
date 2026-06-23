@@ -5,7 +5,7 @@ import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Flame, Navigation, LocateFixed } from "lucide-react";
+import { Loader2, Plus, Flame, LocateFixed } from "lucide-react";
 import { toast } from "sonner";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
