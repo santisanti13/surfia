@@ -18,6 +18,7 @@ import HeatMapOverlay from "@/components/spots/HeatMapOverlay";
 import { type SpotFilters, emptyFilters } from "@/components/spots/SpotFiltersBar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import Seo from "@/components/Seo";
 
 interface SurfSpot {
   id: string;
