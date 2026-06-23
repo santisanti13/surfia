@@ -88,12 +88,29 @@ const Index = () => {
             <span className="sr-only"> — Previsión de surf en tiempo real en España</span>
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-lg md:text-xl text-foreground/80 max-w-xl mx-auto mt-4 font-body font-light"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: { transition: { delayChildren: 0.4, staggerChildren: 0.04 } },
+            }}
+            className="text-lg md:text-xl text-foreground max-w-2xl mx-auto mt-6 font-body font-medium leading-relaxed tracking-wide [text-shadow:0_1px_2px_rgba(255,255,255,0.6)]"
           >
-            Previsión de olas en tiempo real cerca de ti. Consulta oleaje, viento y marejada en los mejores spots de surf.
+            {"Previsión de olas en tiempo real cerca de ti. Consulta oleaje, viento y marejada en los mejores spots de surf."
+              .split(" ")
+              .map((word, i) => (
+                <motion.span
+                  key={i}
+                  variants={{
+                    hidden: { opacity: 0, y: 12, filter: "blur(4px)" },
+                    visible: { opacity: 1, y: 0, filter: "blur(0px)" },
+                  }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="inline-block mr-[0.28em]"
+                >
+                  {word}
+                </motion.span>
+              ))}
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
