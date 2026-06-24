@@ -93,15 +93,8 @@ Deno.serve(async (req) => {
     });
   }
 
-  try {
-    const body = await req.json().catch(() => ({}));
-    const limit = Math.min(body.limit ?? 20, 50);
-    const dryRun = body.dry_run === true;
 
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
+
 
   try {
     const body = await req.json().catch(() => ({}));
