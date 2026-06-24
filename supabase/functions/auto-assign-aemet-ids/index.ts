@@ -38,34 +38,49 @@ function normalize(s: string): string {
     .trim();
 }
 
-/** Pick the best AEMET match by token overlap with name + municipality. */
-function bestMatch(
+/**
+ * STRICT match: the spot's primary name (first word of the name, before parenthesis/dash)
+ * MUST appear as a contiguous token sequence in the AEMET beach name.
+ * Municipality is used only as tie-breaker, never to lower the bar.
+ */
+function primaryName(spotName: string): string {
+  // "Playa de Andrín" → "andrin"; "Area Maior (Muros)" → "area maior"
+  const cleaned = spotName.replace(/\(.*?\)/g, " ").replace(/[-–—]/g, " ");
+  const n = normalize(cleaned)
+    .replace(/^(playa|cala|punta|spot|la|el|las|los|de|del|do|da|dos|das)\s+/g, "")
+    .trim();
+  return n || normalize(spotName);
+}
+
+function strictMatch(
   candidates: Array<{ name: string; id: string }>,
   spotName: string,
   municipality: string,
 ): { name: string; id: string } | null {
   if (candidates.length === 0) return null;
-  if (candidates.length === 1) return candidates[0];
+  const primary = primaryName(spotName);
+  if (!primary || primary.length < 3) return null;
 
-  const spotTokens = new Set(normalize(spotName).split(" ").filter(Boolean));
   const muniTokens = new Set(normalize(municipality).split(" ").filter(Boolean));
 
-  let best = candidates[0];
+  // Keep only candidates whose normalized name CONTAINS the full primary string as a substring (word-bounded)
+  const re = new RegExp(`(^|\\s)${primary.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\s|$)`);
+  const strict = candidates.filter((c) => re.test(normalize(c.name)));
+  if (strict.length === 0) return null;
+  if (strict.length === 1) return strict[0];
+
+  // Tie-break by municipality token overlap
+  let best = strict[0];
   let bestScore = -1;
-  for (const c of candidates) {
-    const tokens = normalize(c.name).split(" ").filter(Boolean);
+  for (const c of strict) {
+    const tokens = normalize(c.name).split(" ");
     let score = 0;
-    for (const t of tokens) {
-      if (spotTokens.has(t)) score += 3;
-      if (muniTokens.has(t)) score += 1;
-    }
-    if (score > bestScore) {
-      bestScore = score;
-      best = c;
-    }
+    for (const t of tokens) if (muniTokens.has(t)) score += 1;
+    if (score > bestScore) { bestScore = score; best = c; }
   }
   return best;
 }
+
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
