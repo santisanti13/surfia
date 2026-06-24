@@ -327,6 +327,7 @@ Deno.serve(async (req) => {
               results.push({ spot: spot.name, status: "update_error", error: upErr.message });
               continue;
             }
+            await logAssignment(supabase, spot, spot.playa_id_aemet, null, "reassign_suspicious");
           }
           results.push({
             spot: spot.name,
