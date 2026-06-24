@@ -105,8 +105,14 @@ const Spots = () => {
       const saved = localStorage.getItem("surfia:userPos");
       if (saved) {
         const parsed = JSON.parse(saved) as [number, number];
-        if (Array.isArray(parsed) && parsed.length === 2) setUserPos(parsed);
+        if (Array.isArray(parsed) && parsed.length === 2) {
+          const [lat, lng] = parsed;
+          const inSpain = lat >= 27.5 && lat <= 43.9 && lng >= -18.5 && lng <= 4.5;
+          if (inSpain) setUserPos(parsed);
+          else localStorage.removeItem("surfia:userPos");
+        }
       }
+
     } catch { /* ignore */ }
   }, []);
 
@@ -119,7 +125,17 @@ const Spots = () => {
     setGeoError(null);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const coords: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        // Spain bounds (peninsular + Baleares + Canarias)
+        const inSpain = lat >= 27.5 && lat <= 43.9 && lng >= -18.5 && lng <= 4.5;
+        if (!inSpain) {
+          setGeoLoading(false);
+          setGeoError("Estás fuera de España — mostrando todas las playas peninsulares.");
+          toast.info("Tu ubicación está fuera de España. Mostrando todas las playas.");
+          return;
+        }
+        const coords: [number, number] = [lat, lng];
         setUserPos(coords);
         try { localStorage.setItem("surfia:userPos", JSON.stringify(coords)); } catch { /* ignore */ }
         setGeoLoading(false);
@@ -127,6 +143,7 @@ const Spots = () => {
         setFilters((prev) => prev.maxDistance === null ? { ...prev, maxDistance: 50 } : prev);
         toast.success("Ubicación lista — mostrando playas a menos de 50 km");
       },
+
       (err) => {
         setGeoLoading(false);
         const msg = err.code === err.PERMISSION_DENIED
