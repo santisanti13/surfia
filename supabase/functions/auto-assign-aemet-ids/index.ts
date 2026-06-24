@@ -222,6 +222,46 @@ async function tryManualMap(
 
 
 
+async function loadDbMappings(supabase: any) {
+  const { data } = await supabase
+    .from("aemet_manual_mappings")
+    .select("spot_name, aemet_id, aemet_name");
+  if (!data) return;
+  for (const row of data) {
+    const key = normalize(row.spot_name);
+    if (!key) continue;
+    // DB overrides hardcoded
+    MANUAL_MAP[key] = {
+      query: row.aemet_name || row.spot_name,
+      expect: normalize(row.aemet_name || row.spot_name),
+    };
+    // Also accept by direct ID via a sentinel
+    (MANUAL_MAP as any)[`__direct__${key}`] = { id: row.aemet_id, name: row.aemet_name || row.spot_name };
+  }
+}
+
+function directDbMatch(spotName: string): { id: string; name: string } | null {
+  const key = normalize(spotName);
+  const v = (MANUAL_MAP as any)[`__direct__${key}`];
+  return v ?? null;
+}
+
+async function logAssignment(
+  supabase: any,
+  spot: { id: string; name: string },
+  previous: string | null,
+  next: string | null,
+  method: string,
+) {
+  await supabase.from("aemet_assignment_log").insert({
+    spot_id: spot.id,
+    spot_name: spot.name,
+    previous_aemet_id: previous,
+    new_aemet_id: next,
+    method,
+  });
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -233,9 +273,6 @@ Deno.serve(async (req) => {
     });
   }
 
-
-
-
   try {
     const body = await req.json().catch(() => ({}));
     const limit = Math.min(body.limit ?? 20, 50);
@@ -246,6 +283,8 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    await loadDbMappings(supabase);
 
     // ===== Mode: reassign_suspicious =====
     // Re-evaluate already-assigned spots with the strict matcher; null out the ones that don't pass.
@@ -288,6 +327,7 @@ Deno.serve(async (req) => {
               results.push({ spot: spot.name, status: "update_error", error: upErr.message });
               continue;
             }
+            await logAssignment(supabase, spot, spot.playa_id_aemet, null, "reassign_suspicious");
           }
           results.push({
             spot: spot.name,
@@ -334,9 +374,16 @@ Deno.serve(async (req) => {
 
       const municipality = (spot.location || "").split(",")[0]?.trim() || "";
 
-      // 0) Manual mapping for famous spots — runs first, bypasses strict matcher
-      let pick: { name: string; id: string } | null = await tryManualMap(spot.name, spot.location || "");
-      let via: "manual" | "strict_name" | "strict_municipio" | null = pick ? "manual" : null;
+      // 0a) Direct DB mapping (admin-supplied) — assigns the AEMET id without web search
+      const direct = directDbMatch(spot.name);
+      let pick: { name: string; id: string } | null = direct;
+      let via: "manual_db" | "manual" | "strict_name" | "strict_municipio" | null = direct ? "manual_db" : null;
+
+      // 0b) Manual mapping (hardcoded + DB-derived query/expect)
+      if (!pick) {
+        const manual = await tryManualMap(spot.name, spot.location || "");
+        if (manual) { pick = manual; via = "manual"; }
+      }
 
       // 1) Search by spot name — STRICT
       if (!pick) {
@@ -364,6 +411,7 @@ Deno.serve(async (req) => {
             results.push({ spot: spot.name, status: "update_error", error: upErr.message });
             continue;
           }
+          await logAssignment(supabase, spot, spot.playa_id_aemet, pick.id, via || "unknown");
         }
         results.push({
           spot: spot.name,

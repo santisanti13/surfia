@@ -14,6 +14,80 @@ export type Database = {
   }
   public: {
     Tables: {
+      aemet_assignment_log: {
+        Row: {
+          created_at: string
+          id: string
+          method: string
+          new_aemet_id: string | null
+          previous_aemet_id: string | null
+          run_by: string | null
+          spot_id: string | null
+          spot_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          method: string
+          new_aemet_id?: string | null
+          previous_aemet_id?: string | null
+          run_by?: string | null
+          spot_id?: string | null
+          spot_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          method?: string
+          new_aemet_id?: string | null
+          previous_aemet_id?: string | null
+          run_by?: string | null
+          spot_id?: string | null
+          spot_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "aemet_assignment_log_spot_id_fkey"
+            columns: ["spot_id"]
+            isOneToOne: false
+            referencedRelation: "surf_spots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      aemet_manual_mappings: {
+        Row: {
+          aemet_id: string
+          aemet_name: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          spot_name: string
+          updated_at: string
+        }
+        Insert: {
+          aemet_id: string
+          aemet_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          spot_name: string
+          updated_at?: string
+        }
+        Update: {
+          aemet_id?: string
+          aemet_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          spot_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       favorite_spots: {
         Row: {
           created_at: string
@@ -267,15 +341,42 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -402,6 +503,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
