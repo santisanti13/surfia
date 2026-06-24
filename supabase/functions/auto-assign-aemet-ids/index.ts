@@ -374,9 +374,16 @@ Deno.serve(async (req) => {
 
       const municipality = (spot.location || "").split(",")[0]?.trim() || "";
 
-      // 0) Manual mapping for famous spots — runs first, bypasses strict matcher
-      let pick: { name: string; id: string } | null = await tryManualMap(spot.name, spot.location || "");
-      let via: "manual" | "strict_name" | "strict_municipio" | null = pick ? "manual" : null;
+      // 0a) Direct DB mapping (admin-supplied) — assigns the AEMET id without web search
+      const direct = directDbMatch(spot.name);
+      let pick: { name: string; id: string } | null = direct;
+      let via: "manual_db" | "manual" | "strict_name" | "strict_municipio" | null = direct ? "manual_db" : null;
+
+      // 0b) Manual mapping (hardcoded + DB-derived query/expect)
+      if (!pick) {
+        const manual = await tryManualMap(spot.name, spot.location || "");
+        if (manual) { pick = manual; via = "manual"; }
+      }
 
       // 1) Search by spot name — STRICT
       if (!pick) {
@@ -404,6 +411,7 @@ Deno.serve(async (req) => {
             results.push({ spot: spot.name, status: "update_error", error: upErr.message });
             continue;
           }
+          await logAssignment(supabase, spot, spot.playa_id_aemet, pick.id, via || "unknown");
         }
         results.push({
           spot: spot.name,
