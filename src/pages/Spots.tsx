@@ -105,8 +105,14 @@ const Spots = () => {
       const saved = localStorage.getItem("surfia:userPos");
       if (saved) {
         const parsed = JSON.parse(saved) as [number, number];
-        if (Array.isArray(parsed) && parsed.length === 2) setUserPos(parsed);
+        if (Array.isArray(parsed) && parsed.length === 2) {
+          const [lat, lng] = parsed;
+          const inSpain = lat >= 27.5 && lat <= 43.9 && lng >= -18.5 && lng <= 4.5;
+          if (inSpain) setUserPos(parsed);
+          else localStorage.removeItem("surfia:userPos");
+        }
       }
+
     } catch { /* ignore */ }
   }, []);
 
