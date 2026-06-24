@@ -103,6 +103,78 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
+  try {
+    const body = await req.json().catch(() => ({}));
+    const limit = Math.min(body.limit ?? 20, 50);
+    const dryRun = body.dry_run === true;
+    const mode = body.mode === "reassign_suspicious" ? "reassign_suspicious" : "assign";
+
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    // ===== Mode: reassign_suspicious =====
+    // Re-evaluate already-assigned spots with the strict matcher; null out the ones that don't pass.
+    if (mode === "reassign_suspicious") {
+      const { data: spots, error } = await supabase
+        .from("surf_spots")
+        .select("id, name, location, playa_id_aemet")
+        .not("playa_id_aemet", "is", null)
+        .order("name")
+        .limit(limit);
+
+      if (error) {
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const results: Array<Record<string, unknown>> = [];
+      for (const spot of spots || []) {
+        if (results.length > 0) await new Promise((r) => setTimeout(r, 800));
+        const municipality = (spot.location || "").split(",")[0]?.trim() || "";
+        const candidates = await searchAemetBeach(spot.name);
+        const pick = strictMatch(candidates, spot.name, municipality);
+
+        // Suspicious if no strict match found, OR the strict match doesn't agree with the current assignment
+        const suspicious = !pick || pick.id !== spot.playa_id_aemet;
+        if (suspicious) {
+          if (!dryRun) {
+            const { error: upErr } = await supabase
+              .from("surf_spots")
+              .update({ playa_id_aemet: null })
+              .eq("id", spot.id);
+            if (upErr) {
+              results.push({ spot: spot.name, status: "update_error", error: upErr.message });
+              continue;
+            }
+          }
+          results.push({
+            spot: spot.name,
+            location: spot.location,
+            status: dryRun ? "would_null" : "nulled",
+            previous_id: spot.playa_id_aemet,
+            strict_pick: pick?.name ?? null,
+          });
+        } else {
+          results.push({
+            spot: spot.name,
+            status: "kept",
+            aemet_id: pick.id,
+            aemet_name: pick.name,
+          });
+        }
+      }
+
+      const nulled = results.filter((r) => r.status === "nulled" || r.status === "would_null").length;
+      return new Response(
+        JSON.stringify({ mode, processed: results.length, nulled, kept: results.length - nulled, dry_run: dryRun, results }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    // ===== Mode: assign (default) =====
     const { data: spots, error } = await supabase
       .from("surf_spots")
       .select("id, name, location, playa_id_aemet")
@@ -123,15 +195,15 @@ Deno.serve(async (req) => {
 
       const municipality = (spot.location || "").split(",")[0]?.trim() || "";
 
-      // 1) Search by spot name
+      // 1) Search by spot name — STRICT
       let candidates = await searchAemetBeach(spot.name);
-      let pick = bestMatch(candidates, spot.name, municipality);
+      let pick = strictMatch(candidates, spot.name, municipality);
 
-      // 2) Fallback: search by municipality
+      // 2) Fallback: search by municipality, still STRICT on spot name
       if (!pick && municipality) {
         await new Promise((r) => setTimeout(r, 600));
         candidates = await searchAemetBeach(municipality);
-        pick = bestMatch(candidates, spot.name, municipality);
+        pick = strictMatch(candidates, spot.name, municipality);
       }
 
       if (pick) {
@@ -164,6 +236,7 @@ Deno.serve(async (req) => {
     const assigned = results.filter((r) => r.status === "assigned" || r.status === "would_assign").length;
     return new Response(
       JSON.stringify({
+        mode,
         processed: results.length,
         assigned,
         not_found: results.length - assigned,
@@ -178,3 +251,4 @@ Deno.serve(async (req) => {
     });
   }
 });
+
