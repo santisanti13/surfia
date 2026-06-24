@@ -12,6 +12,7 @@ import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Trust from "./pages/Trust";
 import ComoLeerPrevisionesSurf from "./pages/blog/ComoLeerPrevisionesSurf";
+import AdminAemet from "./pages/AdminAemet";
 import AlertCheckerProvider from "./components/AlertCheckerProvider";
 
 const queryClient = new QueryClient();
