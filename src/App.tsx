@@ -33,6 +33,7 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/trust" element={<Trust />} />
             <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
+            <Route path="/admin/aemet" element={<AdminAemet />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
