@@ -155,7 +155,12 @@ Deno.serve(async (req) => {
       if (spot) { lat = spot.lat; lng = spot.lng; }
     }
     if (lat != null && lng != null) {
-      const hours = await fetchStormglassHours(lat, lng, 72);
+      let sourceName = "stormglass";
+      let hours = await fetchStormglassHours(lat, lng, 72);
+      if (!hours || hours.length === 0) {
+        hours = await fetchOpenMeteoHours(lat, lng, 72);
+        sourceName = "open-meteo";
+      }
       if (hours && hours.length > 0) {
         const dayNames = ["Hoy", "Mañana", "Pasado"];
         const startMs = Date.now();
