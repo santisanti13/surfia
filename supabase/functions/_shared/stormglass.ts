@@ -97,6 +97,52 @@ export async function fetchStormglassHours(
   }
 }
 
+// ===== Open-Meteo fallback (free, no API key) =====
+// Used when Stormglass is unavailable (missing key / quota) and there is no
+// AEMET playa_id. Returns the same hourly shape.
+export async function fetchOpenMeteoHours(
+  lat: number,
+  lng: number,
+  hoursAhead = 72,
+): Promise<StormglassHourly[] | null> {
+  try {
+    const marineUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=${lat}&longitude=${lng}&hourly=wave_height,wave_period,wave_direction,sea_surface_temperature&forecast_days=3&timezone=UTC`;
+    const windUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&hourly=wind_speed_10m,wind_direction_10m,temperature_2m&forecast_days=3&timezone=UTC&wind_speed_unit=ms`;
+    const [mRes, wRes] = await Promise.all([fetch(marineUrl), fetch(windUrl)]);
+    if (!mRes.ok && !wRes.ok) return null;
+    const marine = mRes.ok ? await mRes.json() : null;
+    const wind = wRes.ok ? await wRes.json() : null;
+
+    const times: string[] = marine?.hourly?.time ?? wind?.hourly?.time ?? [];
+    if (!times.length) return null;
+
+    const windIndexByTime = new Map<string, number>();
+    (wind?.hourly?.time ?? []).forEach((t: string, i: number) => windIndexByTime.set(t, i));
+
+    const nowIso = new Date().toISOString().slice(0, 13);
+    const out: StormglassHourly[] = [];
+    for (let i = 0; i < times.length && out.length < hoursAhead; i++) {
+      const t = times[i];
+      if (t.slice(0, 13) < nowIso) continue;
+      const wi = windIndexByTime.get(t);
+      out.push({
+        time: `${t}:00Z`,
+        waveHeight: marine?.hourly?.wave_height?.[i] ?? undefined,
+        wavePeriod: marine?.hourly?.wave_period?.[i] ?? undefined,
+        waveDirection: marine?.hourly?.wave_direction?.[i] ?? undefined,
+        windSpeed: wi != null ? wind?.hourly?.wind_speed_10m?.[wi] ?? undefined : undefined,
+        windDirection: wi != null ? wind?.hourly?.wind_direction_10m?.[wi] ?? undefined : undefined,
+        waterTemperature: marine?.hourly?.sea_surface_temperature?.[i] ?? undefined,
+        airTemperature: wi != null ? wind?.hourly?.temperature_2m?.[wi] ?? undefined : undefined,
+      });
+    }
+    return out.length ? out : null;
+  } catch (err) {
+    console.warn("[open-meteo] fetch error", (err as Error).message);
+    return null;
+  }
+}
+
 export function degToCompass(deg?: number): string {
   if (deg == null || isNaN(deg)) return "N/D";
   const dirs = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
