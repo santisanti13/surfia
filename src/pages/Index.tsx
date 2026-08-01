@@ -94,7 +94,7 @@ const Index = () => {
               hidden: {},
               visible: { transition: { delayChildren: 0.4, staggerChildren: 0.04 } },
             }}
-            className="text-lg md:text-xl text-foreground max-w-2xl mx-auto mt-6 font-body font-medium leading-relaxed tracking-wide [text-shadow:0_1px_2px_rgba(255,255,255,0.6)]"
+            className="text-lg md:text-xl text-foreground max-w-2xl mx-auto mt-6 font-body font-medium leading-relaxed tracking-wide [text-shadow:0_2px_12px_hsl(213_80%_6%/0.85)]"
           >
             {"Previsión de olas en tiempo real cerca de ti. Consulta oleaje, viento y marejada en los mejores spots de surf."
               .split(" ")

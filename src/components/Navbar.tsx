@@ -20,12 +20,12 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-background/80 backdrop-blur-xl border-b border-border/50" : ""
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-50 px-3 pt-3">
+      <div
+        className={`max-w-7xl mx-auto px-6 h-16 flex items-center justify-between rounded-2xl transition-all duration-500 ${
+          scrolled ? "glass-panel" : "glass-card"
+        }`}
+      >
         <Link to="/" className="flex items-center gap-2">
           
           <span className="font-display text-2xl tracking-wide">SURFIA</span>
