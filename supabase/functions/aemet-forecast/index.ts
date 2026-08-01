@@ -1,5 +1,5 @@
 import { corsHeaders } from "../_shared/cors.ts";
-import { getSpotByPlayaId, fetchStormglassHours } from "../_shared/stormglass.ts";
+import { getSpotByPlayaId, fetchStormglassHours, fetchOpenMeteoHours } from "../_shared/stormglass.ts";
 
 // AEMET beach forecasts provide data in periods per day:
 // Periods: "00-06", "06-12", "12-18", "18-24" (or "00-24" for full day)
@@ -188,7 +188,7 @@ Deno.serve(async (req) => {
           });
         const first = hours[0];
         const result = {
-          source: "stormglass",
+          source: sourceName,
           chartData,
           general: {
             tAgua: first.waterTemperature != null ? `${first.waterTemperature.toFixed(1)}°C` : "N/D",
@@ -205,8 +205,8 @@ Deno.serve(async (req) => {
 
     // ===== 2) Fallback to AEMET (needs playa_id) =====
     if (!playa_id) {
-      return new Response(JSON.stringify({ error: "no data available" }), {
-        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ error: "no data available", source: "none" }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     const apiKey = Deno.env.get("AEMET_API_KEY");
