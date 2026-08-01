@@ -42,14 +42,14 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
     : spots;
 
   return (
-    <div className="absolute top-0 left-0 h-full w-80 glass-panel border-r border-border/50 overflow-y-auto z-[1000] hidden md:block">
-      <div className="p-4">
-        <div className="mb-3">
-          <h2 className="font-display text-2xl tracking-wide">SPOTS DE SURF</h2>
-          <p className="text-xs text-muted-foreground font-body mt-1">
-            {spots.length} spots · {userPos ? "Ordenados por distancia" : "España"}
-          </p>
-        </div>
+    <div className="absolute top-4 left-4 bottom-4 w-80 glass-panel border border-border/50 rounded-2xl shadow-xl overflow-hidden z-[1000] hidden md:flex flex-col">
+      <div className="px-4 pt-4 pb-3 border-b border-border/40 shrink-0">
+        <h2 className="font-display text-2xl tracking-wide text-foreground">SPOTS DE SURF</h2>
+        <p className="text-xs text-muted-foreground font-body mt-1">
+          {spots.length} spots · {userPos ? "Ordenados por distancia" : "España"}
+        </p>
+      </div>
+      <div className="p-4 overflow-y-auto flex-1 spot-scroll">
 
         {geoError && (
           <div className="flex items-center gap-2 text-xs text-accent bg-accent/10 rounded-lg p-2.5 mb-3 border border-accent/20">
@@ -102,7 +102,7 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
             >
               <div className="flex justify-between items-start gap-2">
                 <div className="min-w-0">
-                  <p className="font-body font-semibold text-sm truncate group-hover:text-primary transition-colors">
+                  <p className="font-body font-semibold text-[15px] leading-tight text-foreground truncate group-hover:text-primary transition-colors">
                     {spot.name}
                   </p>
                   <p className="text-xs text-muted-foreground font-body flex items-center gap-1 mt-0.5">

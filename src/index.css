@@ -142,3 +142,22 @@
 .leaflet-tile-pane {
   filter: saturate(0.85) brightness(0.82) contrast(1.05);
 }
+
+/* Sidebar scrollbar */
+.spot-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--primary) / 0.4) transparent;
+}
+.spot-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.spot-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.spot-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary) / 0.35);
+  border-radius: 9999px;
+}
+.spot-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.6);
+}
