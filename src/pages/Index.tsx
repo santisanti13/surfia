@@ -82,7 +82,7 @@ const Index = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-[8rem] md:text-[12rem] leading-none font-display tracking-tight text-primary"
+            className="text-[8rem] md:text-[12rem] leading-none font-display tracking-tight text-gradient-ocean drop-shadow-[0_8px_40px_hsl(190_60%_50%/0.35)]"
           >
             SURFIA
             <span className="sr-only"> — Previsión de surf en tiempo real en España</span>
@@ -209,7 +209,7 @@ const Index = () => {
                   custom={i + 1}
                   className="flex items-center gap-4"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl glass-card flex items-center justify-center">
                     <f.icon className="h-5 w-5 text-primary" />
                   </div>
                   <span className="font-body text-foreground/90">{f.title}</span>
@@ -251,7 +251,7 @@ const Index = () => {
                 { icon: Wind, label: "Wind", value: "12 kts" },
                 { icon: Thermometer, label: "Water", value: "22°C" },
               ].map((item) => (
-                <div key={item.label} className="text-center p-4 rounded-xl bg-secondary/50">
+                <div key={item.label} className="text-center p-4 rounded-xl glass-card glass-hover">
                   <item.icon className="h-5 w-5 text-primary mx-auto mb-2" />
                   <p className="text-xs text-muted-foreground font-body uppercase tracking-wider">{item.label}</p>
                   <p className="text-lg font-display mt-1">{item.value}</p>
