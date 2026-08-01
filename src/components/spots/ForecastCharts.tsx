@@ -58,7 +58,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   const point = payload[0]?.payload as ChartPoint | undefined;
   return (
-    <div className="bg-background/95 backdrop-blur-sm border border-border/50 rounded-lg px-3 py-2 shadow-lg">
+    <div className="glass-panel border border-border/50 rounded-lg px-3 py-2 shadow-lg">
       <p className="text-[10px] text-muted-foreground font-body mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
         <p key={i} className="text-xs font-body font-medium" style={{ color: entry.color }}>

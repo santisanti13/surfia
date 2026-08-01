@@ -12,7 +12,7 @@ interface SpotCardProps {
 
 const SpotCard = ({ name, location, image, swell, wind, temp, rating }: SpotCardProps) => {
   return (
-    <div className="group glass-card rounded-2xl overflow-hidden hover:glow-primary transition-all duration-500 cursor-pointer">
+    <div className="group glass-card glass-hover rounded-2xl overflow-hidden hover:glow-primary transition-all duration-500 cursor-pointer">
       <div className="relative h-56 overflow-hidden">
         <img
           src={image}

@@ -167,7 +167,7 @@ const SpotCheckinLive = ({ spotId, spotName }: Props) => {
   };
 
   return (
-    <div className="bg-card/60 rounded-xl border border-border/20 p-4 mb-5">
+    <div className="glass-card rounded-xl border border-border/20 p-4 mb-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="relative">

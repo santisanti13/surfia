@@ -9,57 +9,68 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 210 20% 12%;
+    /* Ocean Deep — glassmorphism dark palette */
+    --background: 213 68% 12%;
+    --foreground: 190 40% 96%;
 
-    --card: 210 20% 97%;
-    --card-foreground: 210 20% 12%;
+    --card: 209 60% 20%;
+    --card-foreground: 190 40% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 20% 12%;
+    --popover: 213 62% 14%;
+    --popover-foreground: 190 40% 96%;
 
-    --primary: 185 72% 42%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 190 55% 46%;
+    --primary-foreground: 213 68% 10%;
 
-    --secondary: 210 15% 93%;
-    --secondary-foreground: 210 20% 25%;
+    --secondary: 209 50% 24%;
+    --secondary-foreground: 190 35% 92%;
 
-    --muted: 210 12% 94%;
-    --muted-foreground: 210 10% 45%;
+    --muted: 209 45% 26%;
+    --muted-foreground: 195 30% 78%;
 
-    --accent: 35 90% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 174 40% 55%;
+    --accent-foreground: 213 68% 10%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 72% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 210 15% 88%;
-    --input: 210 15% 88%;
-    --ring: 185 72% 42%;
+    --border: 200 40% 55% / 0.22;
+    --input: 209 45% 28%;
+    --ring: 187 45% 55%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --ocean-deep: 200 25% 95%;
-    --ocean-mid: 190 20% 90%;
-    --ocean-light: 185 50% 35%;
-    --foam: 180 15% 30%;
+    --ocean-deep: 213 68% 12%;
+    --ocean-mid: 209 58% 27%;
+    --ocean-light: 191 55% 40%;
+    --foam: 176 42% 74%;
     --sand: 35 30% 75%;
-    --coral: 15 80% 55%;
+    --coral: 15 80% 62%;
 
     --font-display: 'Bebas Neue', sans-serif;
     --font-hero: 'Boogaloo', cursive;
     --font-body: 'Inter', sans-serif;
 
-    --hero-title: 45 95% 55%;
+    --hero-title: 176 42% 74%;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Glass system (intensity 8/10) */
+    --glass-bg: 200 60% 70% / 0.10;
+    --glass-bg-strong: 200 60% 75% / 0.16;
+    --glass-border: 190 70% 85% / 0.22;
+    --glass-blur: 22px;
+    --shadow-glass: 0 8px 32px -8px hsl(213 80% 4% / 0.55), inset 0 1px 0 0 hsl(190 80% 95% / 0.16);
+    --gradient-aurora: radial-gradient(60% 60% at 15% 0%, hsl(191 55% 40% / 0.35), transparent 70%),
+      radial-gradient(50% 50% at 90% 20%, hsl(174 45% 50% / 0.25), transparent 70%),
+      radial-gradient(60% 60% at 50% 100%, hsl(209 58% 27% / 0.6), transparent 70%);
+
+    --sidebar-background: 213 62% 14%;
+    --sidebar-foreground: 190 35% 90%;
+    --sidebar-primary: 190 55% 46%;
+    --sidebar-primary-foreground: 213 68% 10%;
+    --sidebar-accent: 209 50% 24%;
+    --sidebar-accent-foreground: 190 35% 92%;
+    --sidebar-border: 200 40% 55% / 0.22;
+    --sidebar-ring: 187 45% 55%;
   }
 }
 
@@ -71,28 +82,63 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    background-image: var(--gradient-aurora);
+    background-attachment: fixed;
   }
 
   h1, h2, h3 {
     font-family: var(--font-display);
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.35);
   }
 }
 
 @layer utilities {
   .text-gradient-ocean {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--ocean-light)));
+    background-image: linear-gradient(135deg, hsl(var(--foam)), hsl(var(--primary)));
   }
 
   .bg-ocean-gradient {
-    background: linear-gradient(180deg, hsl(var(--ocean-deep)), hsl(var(--background)));
+    background: linear-gradient(180deg, hsl(var(--ocean-mid) / 0.35), transparent);
   }
 
   .glass-card {
-    @apply bg-card backdrop-blur-xl border border-border shadow-sm;
+    background: hsl(var(--glass-bg));
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  }
+
+  .glass-panel {
+    background: hsl(var(--glass-bg-strong));
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(calc(var(--glass-blur) + 8px)) saturate(180%);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 8px)) saturate(180%);
+  }
+
+  .glass-hover {
+    @apply transition-all duration-300;
+  }
+  .glass-hover:hover {
+    background: hsl(var(--glass-bg-strong));
+    border-color: hsl(var(--primary) / 0.45);
+    transform: translateY(-2px);
   }
 
   .glow-primary {
-    box-shadow: 0 0 40px -10px hsl(var(--primary) / 0.2);
+    box-shadow: 0 0 60px -18px hsl(var(--primary) / 0.55), var(--shadow-glass);
   }
+}
+
+/* Leaflet blends better with the dark glass theme */
+.leaflet-container {
+  background: hsl(var(--ocean-deep));
+}
+.leaflet-tile-pane {
+  filter: saturate(0.85) brightness(0.82) contrast(1.05);
 }

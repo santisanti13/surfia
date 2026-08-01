@@ -126,7 +126,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
       animate={{ x: 0 }}
       exit={{ x: "100%" }}
       transition={{ type: "spring", damping: 25, stiffness: 200 }}
-      className="absolute top-0 right-0 h-full w-full sm:w-[420px] bg-background/95 backdrop-blur-xl border-l border-border/50 z-[1001] overflow-y-auto"
+      className="absolute top-0 right-0 h-full w-full sm:w-[420px] glass-panel border-l border-border/50 z-[1001] overflow-y-auto"
     >
       {/* Header image */}
       <div className="relative h-52">
@@ -141,14 +141,14 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
             onClick={toggleFavorite}
             aria-label={isFavorite ? `Quitar ${spot.name} de favoritos` : `Añadir ${spot.name} a favoritos`}
             aria-pressed={isFavorite}
-            className="w-9 h-9 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors shadow-sm"
+            className="w-9 h-9 rounded-full glass-card flex items-center justify-center hover:bg-background transition-colors shadow-sm"
           >
             <Heart className={`h-4 w-4 ${isFavorite ? "fill-destructive text-destructive" : ""}`} />
           </button>
           <button
             onClick={onClose}
             aria-label="Cerrar panel del spot"
-            className="w-9 h-9 rounded-full bg-background/80 backdrop-blur flex items-center justify-center hover:bg-background transition-colors shadow-sm"
+            className="w-9 h-9 rounded-full glass-card flex items-center justify-center hover:bg-background transition-colors shadow-sm"
           >
             <X className="h-4 w-4" />
           </button>
@@ -174,7 +174,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
         ) : weather ? (
           <>
             {/* Score */}
-            <div className="text-center mb-5 bg-card/50 rounded-2xl border border-border/20 py-5">
+            <div className="text-center mb-5 glass-card rounded-2xl border border-border/20 py-5">
               <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-body">Puntuación Surf</p>
               <p className={`text-5xl font-display mt-1 ${getScoreColor(weather.score || 5)}`}>
                 {weather.score || 5}<span className="text-2xl text-muted-foreground">/10</span>
@@ -194,7 +194,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
             {/* Conditions grid */}
             <div className="grid grid-cols-2 gap-2.5 mb-5">
               {weather.oleaje && (
-                <div className="bg-card/60 rounded-xl p-3.5 border border-border/20">
+                <div className="glass-card rounded-xl p-3.5 border border-border/20">
                   <Waves className="h-4 w-4 text-primary mb-1.5" />
                   <p className="text-[9px] text-muted-foreground uppercase tracking-wider font-body">Oleaje</p>
                   <p className="text-lg font-display mt-0.5">{weather.oleaje.altura}</p>
@@ -204,7 +204,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
                 </div>
               )}
               {weather.viento && (
-                <div className="bg-card/60 rounded-xl p-3.5 border border-border/20">
+                <div className="glass-card rounded-xl p-3.5 border border-border/20">
                   <Wind className="h-4 w-4 text-primary mb-1.5" />
                   <p className="text-[9px] text-muted-foreground uppercase tracking-wider font-body">Viento</p>
                   <p className="text-lg font-display mt-0.5">{weather.viento.velocidad}</p>
@@ -212,7 +212,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
                 </div>
               )}
               {weather.temperatura && (
-                <div className="bg-card/60 rounded-xl p-3.5 border border-border/20">
+                <div className="glass-card rounded-xl p-3.5 border border-border/20">
                   <Thermometer className="h-4 w-4 text-primary mb-1.5" />
                   <p className="text-[9px] text-muted-foreground uppercase tracking-wider font-body">Agua</p>
                   <p className="text-lg font-display mt-0.5">{weather.temperatura.agua}</p>
@@ -222,7 +222,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
                 </div>
               )}
               {weather.uv && (
-                <div className="bg-card/60 rounded-xl p-3.5 border border-border/20">
+                <div className="glass-card rounded-xl p-3.5 border border-border/20">
                   <Sun className="h-4 w-4 text-accent mb-1.5" />
                   <p className="text-[9px] text-muted-foreground uppercase tracking-wider font-body">UV</p>
                   <p className="text-lg font-display mt-0.5">{weather.uv}</p>
@@ -234,7 +234,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
             {/* Forecast toggle */}
             <button
               onClick={() => setShowForecast(!showForecast)}
-              className="w-full flex items-center justify-between bg-card/60 rounded-xl border border-border/20 px-4 py-3 mb-5 hover:bg-card transition-colors"
+              className="w-full flex items-center justify-between glass-card rounded-xl border border-border/20 px-4 py-3 mb-5 hover:bg-card transition-colors"
             >
               <span className="text-xs font-body font-semibold uppercase tracking-wider text-muted-foreground">
                 Previsión 24h
