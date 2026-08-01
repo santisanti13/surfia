@@ -85,7 +85,7 @@ const SuggestSpotForm = ({ onClose, onSubmitted }: SuggestSpotFormProps) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-card/95 backdrop-blur-xl border border-border/50 rounded-2xl p-5 z-[1100] shadow-2xl"
+      className="absolute bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 glass-panel border border-border/50 rounded-2xl p-5 z-[1100] shadow-2xl"
     >
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-display text-lg flex items-center gap-2">

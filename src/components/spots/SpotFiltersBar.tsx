@@ -90,7 +90,7 @@ const SpotFiltersBar = ({
         className={`w-full flex items-center justify-between px-3 py-2 rounded-xl border transition-all text-xs font-body font-medium ${
           active
             ? "bg-primary/10 border-primary/30 text-primary"
-            : "bg-card/60 border-border/30 text-muted-foreground hover:bg-card hover:border-border/50"
+            : "glass-card border-border/30 text-muted-foreground hover:bg-card hover:border-border/50"
         }`}
       >
         <div className="flex items-center gap-2">

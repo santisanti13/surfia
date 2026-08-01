@@ -42,7 +42,7 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
     : spots;
 
   return (
-    <div className="absolute top-0 left-0 h-full w-80 bg-background/95 backdrop-blur-xl border-r border-border/50 overflow-y-auto z-[1000] hidden md:block">
+    <div className="absolute top-0 left-0 h-full w-80 glass-panel border-r border-border/50 overflow-y-auto z-[1000] hidden md:block">
       <div className="p-4">
         <div className="mb-3">
           <h2 className="font-display text-2xl tracking-wide">SPOTS DE SURF</h2>
@@ -66,7 +66,7 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Buscar por nombre o ubicación..."
-            className="w-full bg-card/60 border border-border/30 rounded-xl pl-9 pr-8 py-2 text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+            className="w-full glass-card border border-border/30 rounded-xl pl-9 pr-8 py-2 text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
           />
           {searchQuery && (
             <button
@@ -97,7 +97,7 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
               className={`w-full text-left p-3 rounded-xl transition-all duration-200 group ${
                 selectedSpotId === spot.id
                   ? "bg-primary/10 border border-primary/30 shadow-sm"
-                  : "bg-card/50 border border-transparent hover:bg-card hover:border-border/50 hover:shadow-sm"
+                  : "glass-card border border-transparent hover:bg-card hover:border-border/50 hover:shadow-sm"
               }`}
             >
               <div className="flex justify-between items-start gap-2">

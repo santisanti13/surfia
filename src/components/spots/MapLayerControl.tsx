@@ -15,7 +15,7 @@ const layers: { id: LayerType; icon: typeof Map; label: string }[] = [
 
 const MapLayerControl = ({ activeLayer, onLayerChange }: MapLayerControlProps) => {
   return (
-    <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-1 bg-background/90 backdrop-blur-xl rounded-xl border border-border/50 p-1 shadow-lg">
+    <div className="absolute top-4 right-4 z-[1000] flex flex-col gap-1 glass-panel rounded-xl border border-border/50 p-1 shadow-lg">
       {layers.map(({ id, icon: Icon, label }) => (
         <button
           key={id}

@@ -54,7 +54,7 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
       animate={{ height: currentHeight }}
       transition={{ type: "spring", damping: 30, stiffness: 300 }}
     >
-      <div className="h-full bg-background/95 backdrop-blur-xl rounded-t-2xl border-t border-border/50 shadow-2xl flex flex-col">
+      <div className="h-full glass-panel rounded-t-2xl border-t border-border/50 shadow-2xl flex flex-col">
         {/* Handle */}
         <button
           onClick={() => setExpanded(!expanded)}
@@ -110,7 +110,7 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                   value={searchQuery}
                   onChange={(e) => onSearchChange(e.target.value)}
                   placeholder="Buscar spot..."
-                  className="w-full bg-card/60 border border-border/30 rounded-xl pl-9 pr-8 py-2 text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
+                  className="w-full glass-card border border-border/30 rounded-xl pl-9 pr-8 py-2 text-sm font-body placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
                 />
                 {searchQuery && (
                   <button
@@ -140,7 +140,7 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                     className={`w-full text-left p-3 rounded-xl transition-all ${
                       selectedSpotId === spot.id
                         ? "bg-primary/10 border border-primary/30"
-                        : "bg-card/50 border border-transparent hover:bg-card"
+                        : "glass-card border border-transparent hover:bg-card"
                     }`}
                   >
                     <div className="flex justify-between items-start gap-2">

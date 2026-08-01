@@ -345,7 +345,7 @@ const Spots = () => {
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl border shadow-lg font-body text-xs font-bold transition-all duration-300 backdrop-blur-xl w-[100px] justify-center ${
                   showHeatMap 
                     ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white border-transparent" 
-                    : "bg-background/90 text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground"
+                    : "glass-card text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground"
                 }`}
               >
                 <Flame className={`h-4 w-4 ${showHeatMap ? 'animate-pulse' : ''}`} />
@@ -362,7 +362,7 @@ const Spots = () => {
                 className={`flex items-center gap-2 px-3 py-2 rounded-xl border shadow-lg font-body text-xs font-bold transition-all duration-300 backdrop-blur-xl w-[100px] justify-center ${
                   userPos
                     ? "bg-primary text-primary-foreground border-transparent hover:opacity-90"
-                    : "bg-background/90 text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground"
+                    : "glass-card text-muted-foreground border-border/50 hover:bg-muted hover:text-foreground"
                 } disabled:opacity-60`}
               >
                 {geoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}
@@ -374,7 +374,7 @@ const Spots = () => {
             <div className="absolute top-3 right-3 z-[1000] md:hidden flex flex-col gap-2">
               <button
                 onClick={() => setActiveLayer(activeLayer === "streets" ? "satellite" : activeLayer === "satellite" ? "terrain" : "streets")}
-                className="w-9 h-9 rounded-xl bg-background/90 backdrop-blur-xl border border-border/50 shadow-lg flex items-center justify-center"
+                className="w-9 h-9 rounded-xl glass-panel border border-border/50 shadow-lg flex items-center justify-center"
               >
                 <span className="text-xs font-body font-bold text-muted-foreground">
                   {activeLayer === "streets" ? "🗺️" : activeLayer === "satellite" ? "🛰️" : "⛰️"}
@@ -386,7 +386,7 @@ const Spots = () => {
                 className={`w-9 h-9 rounded-xl border shadow-lg flex items-center justify-center transition-all duration-300 backdrop-blur-xl ${
                   showHeatMap 
                     ? "bg-gradient-to-br from-orange-500 to-rose-500 text-white border-transparent" 
-                    : "bg-background/90 text-muted-foreground border-border/50"
+                    : "glass-card text-muted-foreground border-border/50"
                 }`}
               >
                 <Flame className={`h-4 w-4 ${showHeatMap ? 'animate-pulse' : ''}`} />
@@ -399,7 +399,7 @@ const Spots = () => {
                 className={`w-9 h-9 rounded-xl border shadow-lg flex items-center justify-center transition-all duration-300 backdrop-blur-xl disabled:opacity-60 ${
                   userPos
                     ? "bg-primary text-primary-foreground border-transparent"
-                    : "bg-background/90 text-muted-foreground border-border/50"
+                    : "glass-card text-muted-foreground border-border/50"
                 }`}
               >
                 {geoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <LocateFixed className="h-4 w-4" />}

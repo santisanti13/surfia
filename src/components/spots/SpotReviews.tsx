@@ -127,7 +127,7 @@ const SpotReviews = ({ spotId }: SpotReviewsProps) => {
 
       {/* New review form */}
       {showForm && user && (
-        <div className="bg-card/60 rounded-xl border border-border/30 p-3 mb-3 space-y-2">
+        <div className="glass-card rounded-xl border border-border/30 p-3 mb-3 space-y-2">
           <StarRating rating={newRating} onRate={setNewRating} interactive />
           <textarea
             value={newComment}
