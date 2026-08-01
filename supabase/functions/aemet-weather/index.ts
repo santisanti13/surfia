@@ -76,13 +76,18 @@ Deno.serve(async (req) => {
       if (spot) { lat = spot.lat; lng = spot.lng; }
     }
     if (lat != null && lng != null) {
-      const hours = await fetchStormglassHours(lat, lng, 6);
+      let source = "stormglass";
+      let hours = await fetchStormglassHours(lat, lng, 6);
+      if (!hours || hours.length === 0) {
+        hours = await fetchOpenMeteoHours(lat, lng, 6);
+        source = "open-meteo";
+      }
       if (hours && hours.length > 0) {
         const h = hours[0];
         const waveHeight = h.waveHeight ?? 0;
         const windSpeedKmh = (h.windSpeed ?? 0) * 3.6;
         const result = {
-          source: "stormglass",
+          source,
           oleaje: {
             altura: `${waveHeight.toFixed(1)}m`,
             periodo: h.wavePeriod != null ? `${h.wavePeriod.toFixed(0)}s` : "N/D",
@@ -110,10 +115,11 @@ Deno.serve(async (req) => {
 
     // ===== 2) Fallback to AEMET (needs playa_id) =====
     if (!playa_id) {
-      return new Response(JSON.stringify({ error: "no data available" }), {
-        status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      return new Response(JSON.stringify({ error: "no data available", source: "none" }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
     const apiKey = Deno.env.get("AEMET_API_KEY");
     if (!apiKey) {
       return new Response(JSON.stringify({ error: "AEMET API key not configured" }), {
