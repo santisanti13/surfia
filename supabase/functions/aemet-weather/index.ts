@@ -2,6 +2,7 @@ import { corsHeaders } from "../_shared/cors.ts";
 import {
   getSpotByPlayaId,
   fetchStormglassHours,
+  fetchOpenMeteoHours,
   degToCompass,
   surfScore,
 } from "../_shared/stormglass.ts";
