@@ -13,6 +13,8 @@ import NotFound from "./pages/NotFound";
 import Trust from "./pages/Trust";
 import ComoLeerPrevisionesSurf from "./pages/blog/ComoLeerPrevisionesSurf";
 import AdminAemet from "./pages/AdminAemet";
+import RegionHub from "./pages/regions/RegionHub";
+import RegionPage from "./pages/regions/RegionPage";
 import AlertCheckerProvider from "./components/AlertCheckerProvider";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/surf" element={<RegionHub />} />
+            <Route path="/surf/:region" element={<RegionPage />} />
             <Route path="/trust" element={<Trust />} />
             <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
             <Route path="/admin/aemet" element={<AdminAemet />} />
