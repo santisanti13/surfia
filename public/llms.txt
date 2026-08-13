@@ -2,7 +2,7 @@
 
 > Previsión de surf en tiempo real para los spots de España, con puntuaciones generadas por IA a partir de datos de oleaje, viento y mareas.
 
-SURFIA combina datos oficiales de AEMET y Stormglass con un motor de puntuación propio para ayudar a surfistas a encontrar las mejores olas en cada momento. Incluye más de 60 spots curados en la costa española, alertas geolocalizadas y una comunidad que añade reseñas y fotos.
+SURFIA combina datos de AEMET, Stormglass y Open-Meteo con un motor de puntuación propio para ayudar a surfistas a encontrar las mejores olas en cada momento. Incluye más de 130 spots curados en la costa española, alertas geolocalizadas, check-in en tiempo real y una comunidad que añade reseñas y fotos.
 
 ## Pages
 
@@ -10,6 +10,16 @@ SURFIA combina datos oficiales de AEMET y Stormglass con un motor de puntuación
 - [Spots](/spots): Mapa interactivo con todos los spots de surf de España, filtros por dificultad, tipo de ola y distancia, y condiciones en tiempo real.
 - [Alertas](/alerts): Crea alertas personalizadas para recibir avisos cuando haya buenas condiciones en tus spots favoritos.
 - [Trust & Security](/trust): Política de seguridad, privacidad y manejo de datos.
+
+## Surf en España por zonas
+
+- [Surf en España](/surf): Índice de guías por comunidad autónoma.
+- [Surf en el País Vasco](/surf/pais-vasco): Mundaka, Bakio, Sopelana, Zarautz y Zurriola.
+- [Surf en Cantabria](/surf/cantabria): Somo, Los Locos, Liencres y Langre.
+- [Surf en Asturias](/surf/asturias): Rodiles, Salinas, San Lorenzo y Tapia.
+- [Surf en Galicia](/surf/galicia): Pantín, Doniños, Razo y A Lanzada.
+- [Surf en Andalucía](/surf/andalucia): El Palmar, Caños de Meca, La Fontanilla y Cortadura.
+- [Surf en Canarias](/surf/canarias): Las Canteras, El Confital, La Santa, Famara y El Socorro.
 
 ## Blog
 
