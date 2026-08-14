@@ -39,7 +39,9 @@ const App = () => (
             <Route path="/surf" element={<RegionHub />} />
             <Route path="/surf/:region" element={<RegionPage />} />
             <Route path="/trust" element={<Trust />} />
+            <Route path="/blog" element={<BlogIndex />} />
             <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/admin/aemet" element={<AdminAemet />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="*" element={<NotFound />} />
