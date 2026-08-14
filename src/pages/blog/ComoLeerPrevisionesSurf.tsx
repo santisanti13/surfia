@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import StickyMobileCta from "@/components/StickyMobileCta";
 import Seo from "@/components/Seo";
+import ShareButton from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 
 const PUBLISHED = "2026-06-23";
