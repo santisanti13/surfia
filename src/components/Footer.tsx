@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   const links: Array<{ label: string; to: string }> = [
     { label: "Surf en España", to: "/surf" },
+    { label: "Blog", to: "/blog" },
     { label: "Guía de previsiones", to: "/blog/como-leer-previsiones-surf" },
     { label: "Trust & Security", to: "/trust" },
     { label: "Privacy", to: "/trust" },
