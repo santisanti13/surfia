@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import Trust from "./pages/Trust";
 import ComoLeerPrevisionesSurf from "./pages/blog/ComoLeerPrevisionesSurf";
 import AdminAemet from "./pages/AdminAemet";
+import OAuthConsent from "./pages/OAuthConsent";
 import RegionHub from "./pages/regions/RegionHub";
 import RegionPage from "./pages/regions/RegionPage";
 import AlertCheckerProvider from "./components/AlertCheckerProvider";
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/trust" element={<Trust />} />
             <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
             <Route path="/admin/aemet" element={<AdminAemet />} />
+            <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "sdk_version": "0.26.2",
+  "path": "/functions/v1/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://zaujdnwzngtcnfektfgj.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "surfia",
+      "version": "0.1.0",
+      "title": "SurfIA"
+    },
+    "tools": [
+      {
+        "name": "search_spots",
+        "title": "Buscar spots de surf",
+        "description": "Busca spots de surf aprobados en España por nombre, localidad, dificultad o tipo de ola. Devuelve coordenadas útiles para pedir la previsión.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Texto a buscar en el nombre o la localidad del spot."
+            },
+            "difficulty": {
+              "type": "string",
+              "description": "Filtra por dificultad (p. ej. principiante, intermedio, avanzado)."
+            },
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 20,
+              "description": "Número máximo de spots a devolver."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_spot_forecast",
+        "title": "Previsión de un spot",
+        "description": "Devuelve las condiciones actuales de surf (altura de ola, periodo, viento, temperatura y puntuación) de un spot concreto.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spot_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "ID del spot obtenido con search_spots."
+            }
+          },
+          "required": [
+            "spot_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_favorites",
+        "title": "Mis spots favoritos",
+        "description": "Lista los spots de surf marcados como favoritos por el usuario autenticado.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "add_favorite",
+        "title": "Guardar spot favorito",
+        "description": "Añade un spot a los favoritos del usuario autenticado.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": true,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spot_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "ID del spot obtenido con search_spots."
+            }
+          },
+          "required": [
+            "spot_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_alerts",
+        "title": "Mis alertas de olas",
+        "description": "Lista las alertas de oleaje configuradas por el usuario autenticado.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "create_alert",
+        "title": "Crear alerta de olas",
+        "description": "Crea una alerta para avisar al usuario cuando un spot supere una altura mínima de ola y no exceda un viento máximo.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spot_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "ID del spot obtenido con search_spots."
+            },
+            "min_wave_height": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 15,
+              "description": "Altura mínima de ola en metros."
+            },
+            "max_wind_speed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 120,
+              "description": "Velocidad máxima de viento en km/h."
+            },
+            "preferred_wind_direction": {
+              "type": "string",
+              "description": "Dirección de viento preferida (p. ej. S, SW, offshore)."
+            }
+          },
+          "required": [
+            "spot_id",
+            "min_wave_height"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "checkin_spot",
+        "title": "Hacer check-in en un spot",
+        "description": "Marca al usuario autenticado como 'en el agua' en un spot durante 2 horas para que otros surfistas lo vean.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spot_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "ID del spot obtenido con search_spots."
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 200,
+              "description": "Nota corta opcional sobre las condiciones."
+            }
+          },
+          "required": [
+            "spot_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_live_checkins",
+        "title": "Quién está en el agua",
+        "description": "Muestra los check-ins activos (últimas 2 horas) de un spot o de todos los spots.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "spot_id": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Limita el resultado a un spot concreto."
+            }
+          },
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

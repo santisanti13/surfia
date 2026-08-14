@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Waves, Mail, Lock, User, ArrowLeft } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import Seo from "@/components/Seo";
 
@@ -16,6 +16,10 @@ const Auth = () => {
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const rawNext = searchParams.get("next") ?? "";
+  const nextPath = /^\/(?!\/)/.test(rawNext) ? rawNext : "";
+  const afterAuthUrl = nextPath ? window.location.origin + nextPath : window.location.origin;
 
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +31,7 @@ const Auth = () => {
         toast.error(error.message);
       } else {
         toast.success("¡Bienvenido!");
-        navigate("/spots");
+        navigate(nextPath || "/spots");
       }
     } else {
       const { error } = await supabase.auth.signUp({
@@ -35,14 +39,14 @@ const Auth = () => {
         password,
         options: {
           data: { full_name: name },
-          emailRedirectTo: window.location.origin,
+          emailRedirectTo: afterAuthUrl,
         },
       });
       if (error) {
         toast.error(error.message);
       } else {
         toast.success("¡Cuenta creada! Ya puedes usar la app.");
-        navigate("/spots");
+        navigate(nextPath || "/spots");
       }
     }
     setLoading(false);
@@ -50,7 +54,7 @@ const Auth = () => {
 
   const handleGoogleAuth = async () => {
     const { error } = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
+      redirect_uri: afterAuthUrl,
     });
     if (error) {
       toast.error("Error al iniciar sesión con Google");
