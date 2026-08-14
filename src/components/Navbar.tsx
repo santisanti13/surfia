@@ -50,6 +50,7 @@ const Navbar = () => {
                 onClick={signOut}
                 className="text-foreground/70 hover:text-primary transition-colors"
                 title="Cerrar sesión"
+                aria-label="Cerrar sesión"
               >
                 <LogOut className="h-4 w-4" />
               </button>

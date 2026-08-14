@@ -290,6 +290,7 @@ const Spots = () => {
         path="/spots"
         jsonLd={{ "@context": "https://schema.org", "@type": "CollectionPage", name: "Spots de surf en España", url: "https://surfiaa.com/spots" }}
       />
+      <h1 className="sr-only">Mapa de spots de surf en España</h1>
       <Navbar />
       <div className="flex-1 relative mt-16">
         {loading ? (
@@ -383,6 +384,7 @@ const Spots = () => {
 
               <button
                 onClick={() => setShowHeatMap(!showHeatMap)}
+                aria-label={showHeatMap ? "Ocultar mapa de calor de olas" : "Mostrar mapa de calor de olas"}
                 className={`w-9 h-9 rounded-xl border shadow-lg flex items-center justify-center transition-all duration-300 backdrop-blur-xl ${
                   showHeatMap 
                     ? "bg-gradient-to-br from-orange-500 to-rose-500 text-white border-transparent" 
