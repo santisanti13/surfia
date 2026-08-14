@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import SpotCard from "@/components/SpotCard";
 import Footer from "@/components/Footer";
+import StickyMobileCta from "@/components/StickyMobileCta";
 import Seo from "@/components/Seo";
 
 const spots = [
@@ -262,6 +263,7 @@ const Index = () => {
         </div>
       </section>
 
+      <StickyMobileCta />
       <Footer />
     </div>
   );

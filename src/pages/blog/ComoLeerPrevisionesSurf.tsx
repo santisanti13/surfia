@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 import { Waves, Wind, Compass, Clock, ArrowLeft, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCta from "@/components/StickyMobileCta";
 import Seo from "@/components/Seo";
+import ShareButton from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 
 const PUBLISHED = "2026-06-23";
@@ -104,10 +106,38 @@ const ComoLeerPrevisionesSurf = () => {
               marea… Esta guía te enseña a interpretarlos para decidir <strong>dónde y cuándo</strong>{" "}
               meterte al agua, ya seas principiante o estés afinando tu lectura del mar.
             </p>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <Link to="/spots">
+                <Button variant="hero" size="sm" className="rounded-full">
+                  Ver condiciones en tiempo real <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+              <ShareButton title="Cómo leer previsiones para hacer surf" />
+            </div>
             <p className="mt-3 text-xs text-muted-foreground font-body">
               Publicado el 23 de junio de 2026 · Lectura ~7 min
             </p>
           </header>
+
+          <section aria-labelledby="tldr" className="glass-card rounded-2xl p-6 mb-12">
+            <h2 id="tldr" className="font-display text-2xl tracking-tight">
+              TL;DR — Key takeaways
+            </h2>
+            <ul className="mt-4 space-y-2 font-body text-foreground/90 text-sm">
+              {[
+                "Altura + periodo mandan: 0,5–1 m y 8–11 s es surf asequible; más de 13 s implica olas potentes.",
+                "El viento offshore limpia la ola; el onshore fuerte arruina cualquier swell.",
+                "La marea decide la ventana: normalmente unas dos horas útiles por sesión.",
+                "Cruza los tres datos antes de conducir: si uno falla, el día no compensa.",
+              ].map((t) => (
+                <li key={t} className="flex gap-3">
+                  <span className="text-primary">→</span>
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
 
           <section className="space-y-4 mb-12">
             <h2 className="font-display text-3xl tracking-tight flex items-center gap-3">
@@ -265,6 +295,7 @@ const ComoLeerPrevisionesSurf = () => {
         </article>
       </main>
 
+      <StickyMobileCta />
       <Footer />
     </div>
   );

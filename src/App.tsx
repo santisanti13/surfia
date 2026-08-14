@@ -12,6 +12,8 @@ import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Trust from "./pages/Trust";
 import ComoLeerPrevisionesSurf from "./pages/blog/ComoLeerPrevisionesSurf";
+import BlogIndex from "./pages/blog/BlogIndex";
+import BlogPost from "./pages/blog/BlogPost";
 import AdminAemet from "./pages/AdminAemet";
 import OAuthConsent from "./pages/OAuthConsent";
 import RegionHub from "./pages/regions/RegionHub";
@@ -37,7 +39,9 @@ const App = () => (
             <Route path="/surf" element={<RegionHub />} />
             <Route path="/surf/:region" element={<RegionPage />} />
             <Route path="/trust" element={<Trust />} />
+            <Route path="/blog" element={<BlogIndex />} />
             <Route path="/blog/como-leer-previsiones-surf" element={<ComoLeerPrevisionesSurf />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/admin/aemet" element={<AdminAemet />} />
             <Route path="/.lovable/oauth/consent" element={<OAuthConsent />} />
             <Route path="*" element={<NotFound />} />

@@ -23,4 +23,9 @@ SURFIA combina datos de AEMET, Stormglass y Open-Meteo con un motor de puntuaci�
 
 ## Blog
 
+- [Blog de surf](/blog): Índice de guías sobre previsión, mareas, spots y material.
 - [Cómo leer previsiones de surf](/blog/como-leer-previsiones-surf): Guía para interpretar altura, periodo y dirección del oleaje, viento y mareas.
+- [Dónde aprender a surfear en España](/blog/mejores-playas-para-aprender-a-surfear-en-espana): Playas de iniciación por costa, fondo, marea y época recomendada.
+- [Calendario de olas en España](/blog/cuando-hay-olas-en-espana): Consistencia de swell mes a mes y por costa.
+- [Mareas y surf](/blog/mareas-y-surf): Marea óptima por tipo de fondo y cómo leer el coeficiente.
+- [Cómo elegir tabla de surf](/blog/como-elegir-tabla-de-surf): Litraje por peso y nivel, tipos de tabla y ola.

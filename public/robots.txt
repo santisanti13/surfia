@@ -1,8 +1,14 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /page/
+Disallow: /admin/
+Disallow: /auth
+Disallow: /reset-password
 
 User-agent: Bingbot
 Allow: /
+Disallow: /page/
+Disallow: /admin/
 
 User-agent: Twitterbot
 Allow: /
@@ -12,5 +18,9 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /page/
+Disallow: /admin/
+Disallow: /auth
+Disallow: /reset-password
 
 Sitemap: https://surfiaa.com/sitemap.xml
