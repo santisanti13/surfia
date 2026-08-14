@@ -46,13 +46,38 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://surfiaa.com/alerts</loc>
+    <loc>https://surfiaa.com/blog</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://surfiaa.com/blog/como-leer-previsiones-surf</loc>
     <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://surfiaa.com/blog/mejores-playas-para-aprender-a-surfear-en-espana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://surfiaa.com/blog/cuando-hay-olas-en-espana</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://surfiaa.com/blog/mareas-y-surf</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://surfiaa.com/blog/como-elegir-tabla-de-surf</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://surfiaa.com/alerts</loc>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
