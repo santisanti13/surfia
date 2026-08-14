@@ -12,6 +12,8 @@ import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import Trust from "./pages/Trust";
 import ComoLeerPrevisionesSurf from "./pages/blog/ComoLeerPrevisionesSurf";
+import BlogIndex from "./pages/blog/BlogIndex";
+import BlogPost from "./pages/blog/BlogPost";
 import AdminAemet from "./pages/AdminAemet";
 import OAuthConsent from "./pages/OAuthConsent";
 import RegionHub from "./pages/regions/RegionHub";
