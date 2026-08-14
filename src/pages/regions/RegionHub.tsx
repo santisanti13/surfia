@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCta from "@/components/StickyMobileCta";
 import Seo from "@/components/Seo";
 import { regions } from "@/data/regions";
 
@@ -68,6 +69,7 @@ const RegionHub = () => {
         </div>
       </main>
 
+      <StickyMobileCta />
       <Footer />
     </div>
   );

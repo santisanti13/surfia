@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Waves, Wind, Compass, Clock, ArrowLeft, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCta from "@/components/StickyMobileCta";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 
@@ -265,6 +266,7 @@ const ComoLeerPrevisionesSurf = () => {
         </article>
       </main>
 
+      <StickyMobileCta />
       <Footer />
     </div>
   );

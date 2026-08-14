@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Compass, MapPin, Thermometer, Wind } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StickyMobileCta from "@/components/StickyMobileCta";
 import Seo from "@/components/Seo";
 import { Button } from "@/components/ui/button";
 import { getRegion, regions } from "@/data/regions";
@@ -177,6 +178,7 @@ const RegionPage = () => {
         </article>
       </main>
 
+      <StickyMobileCta />
       <Footer />
     </div>
   );
