@@ -266,6 +266,7 @@ const Alerts = () => {
                     />
                     <button
                       onClick={() => deleteAlert(alert.id)}
+                      aria-label="Eliminar alerta"
                       className="text-muted-foreground hover:text-destructive transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
