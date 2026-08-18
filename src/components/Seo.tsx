@@ -4,12 +4,13 @@ interface SeoProps {
   title: string;
   description: string;
   path: string;
+  ogType?: "website" | "article";
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const SITE = "https://surfiaa.com";
 
-const Seo = ({ title, description, path, jsonLd }: SeoProps) => {
+const Seo = ({ title, description, path, ogType = "website", jsonLd }: SeoProps) => {
   const url = `${SITE}${path}`;
   const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
   return (
@@ -19,6 +20,7 @@ const Seo = ({ title, description, path, jsonLd }: SeoProps) => {
       <link rel="canonical" href={url} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
+      <meta property="og:type" content={ogType} />
       <meta property="og:url" content={url} />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
