@@ -80,14 +80,14 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                 <button
                   key={spot.id}
                   onClick={() => { onSpotClick(spot); setExpanded(false); }}
-                  className={`flex-shrink-0 w-40 text-left p-2.5 rounded-xl transition-all border ${
+                  className={`spot-list-card flex-shrink-0 w-40 text-left p-2.5 rounded-xl transition-all border ${
                     selectedSpotId === spot.id
-                      ? "bg-primary/15 border-primary/40"
-                      : "bg-card border-border/50 hover:border-primary/50 hover:bg-primary/5"
+                      ? "spot-list-card-active border-primary/40"
+                      : "border-border/50 hover:border-primary/50"
                   }`}
                 >
-                  <p className="font-body font-bold text-sm text-foreground truncate leading-tight">{spot.name}</p>
-                  <div className="flex items-center gap-1 text-[10px] text-secondary-foreground mt-0.5">
+                  <p className="font-body font-bold text-sm text-card-foreground truncate leading-tight">{spot.name}</p>
+                  <div className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground mt-0.5">
                     <MapPin className="h-2.5 w-2.5 shrink-0" />
                     <span className="truncate">{spot.location}</span>
                   </div>
@@ -141,18 +141,18 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                   <button
                     key={spot.id}
                     onClick={() => { onSpotClick(spot); setExpanded(false); }}
-                    className={`w-full text-left p-3 rounded-xl transition-all border ${
+                    className={`spot-list-card w-full text-left p-3 rounded-xl transition-all border ${
                       selectedSpotId === spot.id
-                        ? "bg-primary/20 border-primary/50"
-                        : "bg-card border-border/50 hover:border-primary/50 hover:bg-primary/5"
+                        ? "spot-list-card-active border-primary/50"
+                        : "border-border/50 hover:border-primary/50"
                     }`}
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="min-w-0">
-                        <p className="font-body font-bold text-[15px] leading-tight text-foreground truncate">
+                        <p className="font-body font-bold text-[15px] leading-tight text-card-foreground truncate">
                           {spot.name}
                         </p>
-                        <p className="text-xs font-medium text-secondary-foreground font-body flex items-center gap-1 mt-1">
+                        <p className="text-xs font-semibold text-muted-foreground font-body flex items-center gap-1 mt-1">
                           <MapPin className="h-3 w-3 shrink-0 text-primary/80" />
                           <span className="truncate">{spot.location}</span>
                         </p>

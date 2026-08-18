@@ -95,18 +95,18 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
             <button
               key={spot.id}
               onClick={() => onSpotClick(spot)}
-              className={`w-full text-left p-3 rounded-xl transition-all duration-200 group border ${
+              className={`spot-list-card w-full text-left p-3 rounded-xl transition-all duration-200 group border ${
                 selectedSpotId === spot.id
-                  ? "bg-primary/20 border-primary/50 shadow-sm"
-                  : "bg-card border-border/50 hover:border-primary/50 hover:bg-primary/5"
+                  ? "spot-list-card-active border-primary/50 shadow-sm"
+                  : "border-border/50 hover:border-primary/50"
               }`}
             >
               <div className="flex justify-between items-start gap-2">
                 <div className="min-w-0">
-                  <p className="font-body font-bold text-[15px] leading-snug text-foreground truncate group-hover:text-primary transition-colors">
+                  <p className="font-body font-bold text-[15px] leading-snug text-card-foreground truncate group-hover:text-primary transition-colors">
                     {spot.name}
                   </p>
-                  <p className="text-xs font-medium text-secondary-foreground font-body flex items-center gap-1 mt-1">
+                  <p className="text-xs font-semibold text-muted-foreground font-body flex items-center gap-1 mt-1">
                     <MapPin className="h-3 w-3 shrink-0 text-primary/80" />
                     <span className="truncate">{spot.location}</span>
                   </p>
