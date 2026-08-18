@@ -141,31 +141,33 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                   <button
                     key={spot.id}
                     onClick={() => { onSpotClick(spot); setExpanded(false); }}
-                    className={`w-full text-left p-3 rounded-xl transition-all ${
+                    className={`w-full text-left p-3 rounded-xl transition-all border ${
                       selectedSpotId === spot.id
-                        ? "bg-primary/10 border border-primary/30"
-                        : "glass-card border border-transparent hover:bg-card"
+                        ? "bg-primary/20 border-primary/50"
+                        : "bg-card border-border/50 hover:border-primary/50 hover:bg-primary/5"
                     }`}
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="min-w-0">
-                        <p className="font-body font-semibold text-sm truncate">{spot.name}</p>
-                        <p className="text-xs text-muted-foreground font-body flex items-center gap-1 mt-0.5">
-                          <MapPin className="h-3 w-3 shrink-0" />
+                        <p className="font-body font-bold text-[15px] leading-tight text-foreground truncate">
+                          {spot.name}
+                        </p>
+                        <p className="text-xs font-medium text-secondary-foreground font-body flex items-center gap-1 mt-1">
+                          <MapPin className="h-3 w-3 shrink-0 text-primary/80" />
                           <span className="truncate">{spot.location}</span>
                         </p>
                       </div>
                       {userPos && (
-                        <span className="text-xs text-primary font-body font-semibold whitespace-nowrap bg-primary/10 px-2 py-0.5 rounded-full">
+                        <span className="text-xs text-primary font-body font-bold whitespace-nowrap bg-primary/15 px-2 py-0.5 rounded-full">
                           {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                         </span>
                       )}
                     </div>
                     <div className="flex gap-1.5 mt-2">
-                      <span className="text-[10px] uppercase tracking-wider text-muted-foreground bg-secondary px-2 py-0.5 rounded-full font-body">
+                      <span className="text-[11px] uppercase tracking-wider text-secondary-foreground bg-secondary px-2 py-0.5 rounded-full font-body font-medium">
                         {spot.wave_type?.replace(/_/g, " ")}
                       </span>
-                      <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
+                      <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
                         {spot.difficulty}
                       </span>
                     </div>
