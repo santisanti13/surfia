@@ -98,30 +98,30 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
               className={`w-full text-left p-3 rounded-xl transition-all duration-200 group border ${
                 selectedSpotId === spot.id
                   ? "bg-primary/20 border-primary/50 shadow-sm"
-                  : "bg-card/70 border-border/50 hover:bg-card hover:border-primary/40 hover:shadow-sm"
+                  : "bg-card border-border/50 hover:border-primary/50 hover:bg-primary/5"
               }`}
             >
               <div className="flex justify-between items-start gap-2">
                 <div className="min-w-0">
-                  <p className="font-body font-semibold text-[15px] leading-tight text-card-foreground truncate group-hover:text-primary transition-colors">
+                  <p className="font-body font-bold text-[15px] leading-snug text-foreground truncate group-hover:text-primary transition-colors">
                     {spot.name}
                   </p>
-                  <p className="text-xs text-secondary-foreground/80 font-body flex items-center gap-1 mt-0.5">
-                    <MapPin className="h-3 w-3 shrink-0" />
+                  <p className="text-xs font-medium text-secondary-foreground font-body flex items-center gap-1 mt-1">
+                    <MapPin className="h-3 w-3 shrink-0 text-primary/80" />
                     <span className="truncate">{spot.location}</span>
                   </p>
                 </div>
                 {userPos && (
-                  <span className="text-xs text-primary font-body font-semibold whitespace-nowrap bg-primary/20 px-2 py-0.5 rounded-full">
+                  <span className="text-xs text-primary font-body font-bold whitespace-nowrap bg-primary/15 px-2 py-0.5 rounded-full">
                     {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                   </span>
                 )}
               </div>
               <div className="flex gap-1.5 mt-2">
-                <span className="text-[10px] uppercase tracking-wider text-secondary-foreground bg-secondary px-2 py-0.5 rounded-full font-body font-medium">
+                <span className="text-[11px] uppercase tracking-wider text-secondary-foreground bg-secondary px-2 py-0.5 rounded-full font-body font-medium">
                   {spot.wave_type?.replace(/_/g, " ")}
                 </span>
-                <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
+                <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
                   {spot.difficulty}
                 </span>
               </div>
