@@ -80,19 +80,23 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                 <button
                   key={spot.id}
                   onClick={() => { onSpotClick(spot); setExpanded(false); }}
-                  className={`flex-shrink-0 w-40 text-left p-2.5 rounded-xl transition-all ${
+                  className={`flex-shrink-0 w-40 text-left p-2.5 rounded-xl transition-all border ${
                     selectedSpotId === spot.id
-                      ? "bg-primary/10 border border-primary/30"
-                      : "bg-card border border-border/30"
+                      ? "bg-primary/15 border-primary/40"
+                      : "bg-card border-border/50 hover:border-primary/50 hover:bg-primary/5"
                   }`}
                 >
-                  <p className="font-body font-semibold text-xs truncate">{spot.name}</p>
-                  <div className="flex items-center justify-between mt-1">
-                    <span className={`text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full font-body ${getDifficultyColor(spot.difficulty)}`}>
+                  <p className="font-body font-bold text-sm text-foreground truncate leading-tight">{spot.name}</p>
+                  <div className="flex items-center gap-1 text-[10px] text-secondary-foreground mt-0.5">
+                    <MapPin className="h-2.5 w-2.5 shrink-0" />
+                    <span className="truncate">{spot.location}</span>
+                  </div>
+                  <div className="flex items-center justify-between mt-2">
+                    <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
                       {spot.difficulty}
                     </span>
                     {userPos && (
-                      <span className="text-[10px] text-primary font-body font-semibold">
+                      <span className="text-[10px] text-primary font-body font-bold">
                         {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                       </span>
                     )}
