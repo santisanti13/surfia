@@ -77,9 +77,10 @@ const ComoLeerPrevisionesSurf = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Seo
-        title="Cómo leer previsiones para hacer surf — Guía completa | SurfIA"
-        description="Guía práctica para interpretar previsiones de surf: altura y periodo del swell, dirección del viento, mareas y cómo elegir el mejor momento para entrar al agua."
+        title="Cómo leer previsiones de surf: guía práctica | SurfIA"
+        description="Interpreta previsiones de surf: altura y periodo del swell, dirección del viento y mareas para elegir el mejor momento de entrar al agua."
         path="/blog/como-leer-previsiones-surf"
+        ogType="article"
         jsonLd={[articleJsonLd, breadcrumbJsonLd, faqJsonLd]}
       />
       <Navbar />
