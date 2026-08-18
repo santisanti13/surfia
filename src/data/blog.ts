@@ -131,7 +131,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "cuando-hay-olas-en-espana",
-    metaTitle: "Cuándo hay olas en España: calendario de swell por costa | SurfIA",
+    metaTitle: "Cuándo hay olas en España: calendario de swell | SurfIA",
     metaDescription:
       "Mes a mes y costa a costa: cuándo entran los mejores swells en el Cantábrico, Galicia, Andalucía y Canarias, y qué tamaño y temperatura esperar.",
     h1: "Calendario de olas en España: qué costa funciona en cada mes",
@@ -229,7 +229,7 @@ export const posts: BlogPost[] = [
   },
   {
     slug: "mareas-y-surf",
-    metaTitle: "Mareas y surf: cómo afectan a la ola y cuándo entrar | SurfIA",
+    metaTitle: "Mareas y surf: cómo afectan a la ola | SurfIA",
     metaDescription:
       "Cómo influye la marea en cada tipo de fondo, qué es el coeficiente y cómo calcular la mejor ventana para surfear en playas, puntas y arrecifes.",
     h1: "Cómo influye la marea en las olas (y cuándo conviene entrar)",

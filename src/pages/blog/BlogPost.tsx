@@ -121,6 +121,7 @@ const BlogPost = () => {
         title={post.metaTitle}
         description={post.metaDescription}
         path={`/blog/${post.slug}`}
+        ogType="article"
         jsonLd={[articleJsonLd, breadcrumbJsonLd, faqJsonLd]}
       />
       <Navbar />
