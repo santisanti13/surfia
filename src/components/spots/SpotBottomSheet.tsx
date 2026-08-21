@@ -32,10 +32,10 @@ const COLLAPSED_HEIGHT = 80;
 
 const getDifficultyColor = (difficulty: string | null) => {
   switch (difficulty) {
-    case "beginner": return "bg-primary/15 text-primary";
-    case "intermediate": return "bg-accent/15 text-accent";
-    case "advanced": return "bg-destructive/15 text-destructive";
-    default: return "bg-secondary text-muted-foreground";
+    case "beginner": return "bg-primary/15 text-ocean-deep";
+    case "intermediate": return "bg-accent/15 text-ocean-deep";
+    case "advanced": return "bg-destructive/15 text-ocean-deep";
+    default: return "bg-ocean-mid/10 text-ocean-deep";
   }
 };
 
