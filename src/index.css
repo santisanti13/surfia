@@ -159,6 +159,36 @@
     box-shadow: 0 0 0 1px hsl(var(--primary) / 0.25), inset 0 1px 0 hsl(var(--foreground) / 0.25);
   }
 
+  /* Panel de detalle: fondo claro y tipografía azul oscuro legible */
+  .spot-detail-panel {
+    background: hsl(190 40% 96% / 0.97);
+    color: hsl(var(--ocean-deep));
+    backdrop-filter: blur(calc(var(--glass-blur) + 8px)) saturate(150%);
+    -webkit-backdrop-filter: blur(calc(var(--glass-blur) + 8px)) saturate(150%);
+  }
+  .spot-detail-panel .glass-card,
+  .spot-detail-panel .glass-panel {
+    background: hsl(200 45% 91% / 0.95);
+    border-color: hsl(var(--ocean-deep) / 0.14);
+    color: hsl(var(--ocean-deep));
+    box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.5);
+  }
+  .spot-detail-panel .text-muted-foreground {
+    color: hsl(var(--ocean-mid)) !important;
+  }
+  .spot-detail-panel .text-foreground {
+    color: hsl(var(--ocean-deep)) !important;
+  }
+  .spot-detail-panel [class*="border-border"] {
+    border-color: hsl(var(--ocean-deep) / 0.14);
+  }
+  .spot-detail-panel-header,
+  .spot-detail-panel-header .text-muted-foreground {
+    color: hsl(0 0% 100%) !important;
+    text-shadow: 0 2px 12px hsl(213 80% 8% / 0.8);
+  }
+
+
 
   .glow-primary {
     box-shadow: 0 0 60px -18px hsl(var(--primary) / 0.55), var(--shadow-glass);
