@@ -158,13 +158,13 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                         </p>
                       </div>
                       {userPos && (
-                        <span className="text-xs text-ocean-deep font-body font-bold whitespace-nowrap bg-ocean-deep/10 px-2 py-0.5 rounded-full">
+                        <span className="text-xs text-ocean-deep font-body font-bold whitespace-nowrap bg-[hsl(var(--ocean-deep))]/10 px-2 py-0.5 rounded-full">
                           {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                         </span>
                       )}
                     </div>
                     <div className="flex gap-1.5 mt-2">
-                      <span className="text-[11px] uppercase tracking-wider text-ocean-deep bg-ocean-mid/15 px-2 py-0.5 rounded-full font-body font-medium">
+                      <span className="text-[11px] uppercase tracking-wider text-ocean-deep bg-[hsl(var(--ocean-mid))]/15 px-2 py-0.5 rounded-full font-body font-medium">
                         {spot.wave_type?.replace(/_/g, " ")}
                       </span>
                       <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
