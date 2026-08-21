@@ -153,8 +153,8 @@ const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProp
                   <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="label" tick={{ fontSize: 8, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} interval={Math.max(0, Math.floor(dataWithPeriod.length / 5) - 1)} angle={-20} textAnchor="end" height={35} />
-              <YAxis tick={{ fontSize: 9, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} unit="m" />
+              <XAxis dataKey="label" tick={{ fontSize: 8, fill: "hsl(var(--ocean-mid))" }} tickLine={false} axisLine={false} interval={Math.max(0, Math.floor(dataWithPeriod.length / 5) - 1)} angle={-20} textAnchor="end" height={35} />
+              <YAxis tick={{ fontSize: 9, fill: "hsl(var(--ocean-mid))" }} tickLine={false} axisLine={false} unit="m" />
               <Tooltip content={<CustomTooltip />} />
               <Area type="monotone" dataKey="waveHeight" name="Olas" stroke="hsl(var(--primary))" fill="url(#waveGrad)" strokeWidth={2} dot={dataWithPeriod.length <= 12} />
             </AreaChart>
@@ -175,8 +175,8 @@ const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProp
                   <stop offset="100%" stopColor="hsl(var(--accent))" stopOpacity={0.2} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="label" tick={{ fontSize: 8, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} interval={Math.max(0, Math.floor(dataWithPeriod.length / 5) - 1)} angle={-20} textAnchor="end" height={35} />
-              <YAxis tick={{ fontSize: 9, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} unit="" />
+              <XAxis dataKey="label" tick={{ fontSize: 8, fill: "hsl(var(--ocean-mid))" }} tickLine={false} axisLine={false} interval={Math.max(0, Math.floor(dataWithPeriod.length / 5) - 1)} angle={-20} textAnchor="end" height={35} />
+              <YAxis tick={{ fontSize: 9, fill: "hsl(var(--ocean-mid))" }} tickLine={false} axisLine={false} unit="" />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="windSpeed" name="Viento" fill="url(#windGrad)" radius={[3, 3, 0, 0]} />
             </BarChart>
@@ -193,14 +193,14 @@ const ForecastCharts = ({ spotName, playaIdAemet, lat, lng }: ForecastChartsProp
             <AreaChart data={dataWithPeriod} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
               <defs>
                 <linearGradient id="periodGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0} />
+                  <stop offset="0%" stopColor="hsl(var(--ocean-mid))" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="hsl(var(--ocean-mid))" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="label" tick={{ fontSize: 8, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} interval={Math.max(0, Math.floor(dataWithPeriod.length / 5) - 1)} angle={-20} textAnchor="end" height={35} />
-              <YAxis tick={{ fontSize: 9, fill: "hsl(var(--muted-foreground))" }} tickLine={false} axisLine={false} unit="s" />
+              <XAxis dataKey="label" tick={{ fontSize: 8, fill: "hsl(var(--ocean-mid))" }} tickLine={false} axisLine={false} interval={Math.max(0, Math.floor(dataWithPeriod.length / 5) - 1)} angle={-20} textAnchor="end" height={35} />
+              <YAxis tick={{ fontSize: 9, fill: "hsl(var(--ocean-mid))" }} tickLine={false} axisLine={false} unit="s" />
               <Tooltip content={<CustomTooltip />} />
-              <Area type="monotone" dataKey="period" name="Periodo" stroke="hsl(var(--muted-foreground))" fill="url(#periodGrad)" strokeWidth={2} dot={dataWithPeriod.length <= 12} />
+              <Area type="monotone" dataKey="period" name="Periodo" stroke="hsl(var(--ocean-mid))" fill="url(#periodGrad)" strokeWidth={2} dot={dataWithPeriod.length <= 12} />
             </AreaChart>
           </ResponsiveContainer>
         </div>

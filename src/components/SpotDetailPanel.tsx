@@ -59,8 +59,7 @@ function generateMockWeather(): WeatherData {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 8) return "text-primary";
-  if (score >= 5) return "text-accent";
+  if (score >= 5) return "text-ocean-mid";
   return "text-destructive";
 }
 
@@ -317,7 +316,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
                 </Button>
               </a>
               <Link to="/alerts">
-                <Button variant="outline" className="w-full rounded-xl mt-2">
+                <Button variant="outline" className="spot-dark-action w-full rounded-xl mt-2">
                   <Bell className="h-4 w-4 mr-2" />
                   Crear alerta para este spot
                 </Button>

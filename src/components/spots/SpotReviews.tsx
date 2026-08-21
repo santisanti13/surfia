@@ -29,7 +29,7 @@ const StarRating = ({ rating, onRate, interactive = false }: { rating: number; o
       >
         <Star
           className={`h-4 w-4 transition-colors ${
-            i <= rating ? "fill-accent text-accent" : "text-muted-foreground/30"
+            i <= rating ? "fill-accent text-ocean-mid" : "text-ocean-mid/50"
           }`}
         />
       </button>
@@ -150,7 +150,7 @@ const SpotReviews = ({ spotId }: SpotReviewsProps) => {
       {/* Reviews list */}
       {reviews.length === 0 ? (
         <div className="text-center py-6 bg-card/40 rounded-xl border border-border/20">
-          <Star className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+          <Star className="h-8 w-8 text-ocean-mid mx-auto mb-2" />
           <p className="text-xs text-muted-foreground font-body">Aún no hay reseñas</p>
         </div>
       ) : (
@@ -169,7 +169,7 @@ const SpotReviews = ({ spotId }: SpotReviewsProps) => {
                 </span>
               </div>
               {review.comment && (
-                <p className="text-xs text-muted-foreground/80 font-body mt-1">{review.comment}</p>
+                <p className="text-xs text-ocean-mid font-body mt-1">{review.comment}</p>
               )}
             </div>
           ))}
