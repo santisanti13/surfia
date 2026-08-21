@@ -126,7 +126,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
       animate={{ x: 0 }}
       exit={{ x: "100%" }}
       transition={{ type: "spring", damping: 25, stiffness: 200 }}
-      className="absolute top-0 right-0 h-full w-full sm:w-[420px] glass-panel border-l border-border/50 z-[1001] overflow-y-auto"
+      className="absolute top-0 right-0 h-full w-full sm:w-[420px] spot-detail-panel border-l border-border/50 z-[1001] overflow-y-auto"
     >
       {/* Header image */}
       <div className="relative h-52">
@@ -153,7 +153,7 @@ const SpotDetailPanel = ({ spot, userPos, onClose, getDistance }: SpotDetailPane
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="absolute bottom-4 left-4 right-4 spot-detail-panel-header">
           <h3 className="text-2xl font-display tracking-wide">{spot.name}</h3>
           <p className="text-sm text-muted-foreground font-body flex items-center gap-1">
             <MapPin className="h-3 w-3" /> {spot.location}
