@@ -29,10 +29,10 @@ interface SpotListSidebarProps {
 
 const getDifficultyColor = (difficulty: string | null) => {
   switch (difficulty) {
-    case "beginner": return "bg-primary/25 text-primary";
-    case "intermediate": return "bg-accent/25 text-accent";
-    case "advanced": return "bg-destructive/25 text-destructive-foreground";
-    default: return "bg-secondary text-secondary-foreground";
+    case "beginner": return "bg-primary/15 text-ocean-deep";
+    case "intermediate": return "bg-accent/15 text-ocean-deep";
+    case "advanced": return "bg-destructive/15 text-ocean-deep";
+    default: return "bg-ocean-mid/10 text-ocean-deep";
   }
 };
 
