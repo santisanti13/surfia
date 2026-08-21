@@ -231,7 +231,7 @@ const SpotCheckinLive = ({ spotId, spotName }: Props) => {
 
       {!user ? (
         <Link to="/auth">
-          <Button variant="outline" size="sm" className="w-full rounded-lg text-xs">
+          <Button variant="outline" size="sm" className="spot-dark-action w-full rounded-lg text-xs">
             Inicia sesión para hacer check-in
           </Button>
         </Link>
@@ -241,7 +241,7 @@ const SpotCheckinLive = ({ spotId, spotName }: Props) => {
           disabled={submitting}
           variant="outline"
           size="sm"
-          className="w-full rounded-lg text-xs"
+          className="spot-dark-action w-full rounded-lg text-xs"
         >
           {submitting ? (
             <Loader2 className="h-3 w-3 animate-spin mr-1.5" />

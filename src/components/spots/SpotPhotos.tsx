@@ -106,7 +106,7 @@ const SpotPhotos = ({ spotId }: SpotPhotosProps) => {
 
       {photos.length === 0 ? (
         <div className="text-center py-6 bg-card/40 rounded-xl border border-border/20">
-          <Camera className="h-8 w-8 text-muted-foreground/30 mx-auto mb-2" />
+          <Camera className="h-8 w-8 text-ocean-mid mx-auto mb-2" />
           <p className="text-xs text-muted-foreground font-body">Aún no hay fotos</p>
           {user && (
             <p className="text-[10px] text-muted-foreground font-body mt-1">Sé el primero en subir una</p>

@@ -176,6 +176,10 @@
   .spot-detail-panel .text-muted-foreground {
     color: hsl(var(--ocean-mid)) !important;
   }
+  .spot-detail-panel .text-primary,
+  .spot-detail-panel .text-accent {
+    color: hsl(var(--ocean-mid)) !important;
+  }
   .spot-detail-panel .text-foreground {
     color: hsl(var(--ocean-deep)) !important;
   }
@@ -183,9 +187,29 @@
     border-color: hsl(var(--ocean-deep) / 0.14);
   }
   .spot-detail-panel-header,
-  .spot-detail-panel-header .text-muted-foreground {
+  .spot-detail-panel-header .text-muted-foreground,
+  .spot-detail-panel-header .text-primary {
     color: hsl(0 0% 100%) !important;
     text-shadow: 0 2px 12px hsl(213 80% 8% / 0.8);
+  }
+  .spot-detail-panel .spot-dark-action {
+    background: hsl(var(--ocean-deep));
+    border-color: hsl(var(--ocean-deep));
+    color: hsl(var(--foreground)) !important;
+  }
+  .spot-detail-panel .spot-dark-action:hover {
+    background: hsl(var(--ocean-mid));
+    color: hsl(var(--foreground)) !important;
+  }
+  .spot-detail-panel input,
+  .spot-detail-panel textarea {
+    color: hsl(var(--ocean-deep));
+    background: hsl(190 40% 98% / 0.95);
+  }
+  .spot-detail-panel input::placeholder,
+  .spot-detail-panel textarea::placeholder {
+    color: hsl(var(--ocean-mid));
+    opacity: 0.85;
   }
 
 
