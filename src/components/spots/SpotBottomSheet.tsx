@@ -32,10 +32,10 @@ const COLLAPSED_HEIGHT = 80;
 
 const getDifficultyColor = (difficulty: string | null) => {
   switch (difficulty) {
-    case "beginner": return "bg-primary/15 text-primary";
-    case "intermediate": return "bg-accent/15 text-accent";
-    case "advanced": return "bg-destructive/15 text-destructive";
-    default: return "bg-secondary text-muted-foreground";
+    case "beginner": return "bg-primary/15 text-ocean-deep";
+    case "intermediate": return "bg-accent/15 text-ocean-deep";
+    case "advanced": return "bg-destructive/15 text-ocean-deep";
+    default: return "bg-[hsl(var(--ocean-mid))]/10 text-ocean-deep";
   }
 };
 
@@ -86,9 +86,9 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                       : "border-border/50 hover:border-primary/50"
                   }`}
                 >
-                  <p className="font-body font-bold text-sm text-card-foreground truncate leading-tight">{spot.name}</p>
-                  <div className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground mt-0.5">
-                    <MapPin className="h-2.5 w-2.5 shrink-0" />
+                  <p className="font-body font-bold text-sm text-ocean-deep truncate leading-tight">{spot.name}</p>
+                  <div className="flex items-center gap-1 text-[10px] font-semibold text-ocean-mid mt-0.5">
+                    <MapPin className="h-2.5 w-2.5 shrink-0 text-ocean-mid" />
                     <span className="truncate">{spot.location}</span>
                   </div>
                   <div className="flex items-center justify-between mt-2">
@@ -96,7 +96,7 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                       {spot.difficulty}
                     </span>
                     {userPos && (
-                      <span className="text-[10px] text-primary font-body font-bold">
+                      <span className="text-[10px] text-ocean-deep font-body font-bold">
                         {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                       </span>
                     )}
@@ -149,22 +149,22 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="min-w-0">
-                        <p className="font-body font-bold text-[15px] leading-tight text-card-foreground truncate">
+                        <p className="font-body font-bold text-[15px] leading-tight text-ocean-deep truncate">
                           {spot.name}
                         </p>
-                        <p className="text-xs font-semibold text-muted-foreground font-body flex items-center gap-1 mt-1">
-                          <MapPin className="h-3 w-3 shrink-0 text-primary/80" />
+                        <p className="text-xs font-semibold text-ocean-mid font-body flex items-center gap-1 mt-1">
+                          <MapPin className="h-3 w-3 shrink-0 text-ocean-mid" />
                           <span className="truncate">{spot.location}</span>
                         </p>
                       </div>
                       {userPos && (
-                        <span className="text-xs text-primary font-body font-bold whitespace-nowrap bg-primary/15 px-2 py-0.5 rounded-full">
+                        <span className="text-xs text-ocean-deep font-body font-bold whitespace-nowrap bg-[hsl(var(--ocean-deep))]/10 px-2 py-0.5 rounded-full">
                           {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                         </span>
                       )}
                     </div>
                     <div className="flex gap-1.5 mt-2">
-                      <span className="text-[11px] uppercase tracking-wider text-secondary-foreground bg-secondary px-2 py-0.5 rounded-full font-body font-medium">
+                      <span className="text-[11px] uppercase tracking-wider text-ocean-deep bg-[hsl(var(--ocean-mid))]/15 px-2 py-0.5 rounded-full font-body font-medium">
                         {spot.wave_type?.replace(/_/g, " ")}
                       </span>
                       <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>

@@ -29,10 +29,10 @@ interface SpotListSidebarProps {
 
 const getDifficultyColor = (difficulty: string | null) => {
   switch (difficulty) {
-    case "beginner": return "bg-primary/25 text-primary";
-    case "intermediate": return "bg-accent/25 text-accent";
-    case "advanced": return "bg-destructive/25 text-destructive-foreground";
-    default: return "bg-secondary text-secondary-foreground";
+    case "beginner": return "bg-primary/15 text-ocean-deep";
+    case "intermediate": return "bg-accent/15 text-ocean-deep";
+    case "advanced": return "bg-destructive/15 text-ocean-deep";
+    default: return "bg-[hsl(var(--ocean-mid))]/10 text-ocean-deep";
   }
 };
 
@@ -103,22 +103,22 @@ const SpotListSidebar = ({ spots, allSpotsCount, selectedSpotId, userPos, geoErr
             >
               <div className="flex justify-between items-start gap-2">
                 <div className="min-w-0">
-                  <p className="font-body font-bold text-[15px] leading-snug text-card-foreground truncate group-hover:text-primary transition-colors">
+                  <p className="font-body font-bold text-[15px] leading-snug text-ocean-deep truncate group-hover:text-ocean-mid transition-colors">
                     {spot.name}
                   </p>
-                  <p className="text-xs font-semibold text-muted-foreground font-body flex items-center gap-1 mt-1">
-                    <MapPin className="h-3 w-3 shrink-0 text-primary/80" />
+                  <p className="text-xs font-semibold text-ocean-mid font-body flex items-center gap-1 mt-1">
+                    <MapPin className="h-3 w-3 shrink-0 text-ocean-mid" />
                     <span className="truncate">{spot.location}</span>
                   </p>
                 </div>
                 {userPos && (
-                  <span className="text-xs text-primary font-body font-bold whitespace-nowrap bg-primary/15 px-2 py-0.5 rounded-full">
+                  <span className="text-xs text-ocean-deep font-body font-bold whitespace-nowrap bg-[hsl(var(--ocean-deep))]/10 px-2 py-0.5 rounded-full">
                     {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                   </span>
                 )}
               </div>
               <div className="flex gap-1.5 mt-2">
-                <span className="text-[11px] uppercase tracking-wider text-secondary-foreground bg-secondary px-2 py-0.5 rounded-full font-body font-medium">
+                <span className="text-[11px] uppercase tracking-wider text-ocean-deep bg-[hsl(var(--ocean-mid))]/15 px-2 py-0.5 rounded-full font-body font-medium">
                   {spot.wave_type?.replace(/_/g, " ")}
                 </span>
                 <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-full font-body font-medium ${getDifficultyColor(spot.difficulty)}`}>
