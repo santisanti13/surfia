@@ -86,9 +86,9 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                       : "border-border/50 hover:border-primary/50"
                   }`}
                 >
-                  <p className="font-body font-bold text-sm text-card-foreground truncate leading-tight">{spot.name}</p>
-                  <div className="flex items-center gap-1 text-[10px] font-semibold text-muted-foreground mt-0.5">
-                    <MapPin className="h-2.5 w-2.5 shrink-0" />
+                  <p className="font-body font-bold text-sm text-ocean-deep truncate leading-tight">{spot.name}</p>
+                  <div className="flex items-center gap-1 text-[10px] font-semibold text-ocean-mid mt-0.5">
+                    <MapPin className="h-2.5 w-2.5 shrink-0 text-ocean-mid" />
                     <span className="truncate">{spot.location}</span>
                   </div>
                   <div className="flex items-center justify-between mt-2">
@@ -96,7 +96,7 @@ const SpotBottomSheet = ({ spots, allSpotsCount, selectedSpotId, userPos, getDis
                       {spot.difficulty}
                     </span>
                     {userPos && (
-                      <span className="text-[10px] text-primary font-body font-bold">
+                      <span className="text-[10px] text-ocean-deep font-body font-bold">
                         {getDistance(userPos[0], userPos[1], spot.lat, spot.lng).toFixed(0)} km
                       </span>
                     )}
