@@ -32,7 +32,7 @@ const getDifficultyColor = (difficulty: string | null) => {
     case "beginner": return "bg-primary/15 text-ocean-deep";
     case "intermediate": return "bg-accent/15 text-ocean-deep";
     case "advanced": return "bg-destructive/15 text-ocean-deep";
-    default: return "bg-ocean-mid/10 text-ocean-deep";
+    default: return "bg-[hsl(var(--ocean-mid))]/10 text-ocean-deep";
   }
 };
 
