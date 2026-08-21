@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { MapPin, Plus, X } from "lucide-react";
+import { MapPin, Plus, X, Link2, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface SuggestSpotFormProps {
@@ -14,9 +14,29 @@ interface SuggestSpotFormProps {
   onSubmitted: () => void;
 }
 
+// Intenta extraer coordenadas del enlace directamente en el cliente
+const parseCoordsFromUrl = (url: string): { lat: number; lng: number } | null => {
+  const patterns = [
+    /@(-?\d+\.\d+),(-?\d+\.\d+)/,
+    /!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/,
+    /[?&](?:q|query|ll|center|destination)=(-?\d+\.\d+),\s*(-?\d+\.\d+)/,
+  ];
+  for (const re of patterns) {
+    const m = url.match(re);
+    if (m) {
+      const lat = parseFloat(m[1]);
+      const lng = parseFloat(m[2]);
+      if (!isNaN(lat) && !isNaN(lng)) return { lat, lng };
+    }
+  }
+  return null;
+};
+
 const SuggestSpotForm = ({ onClose, onSubmitted }: SuggestSpotFormProps) => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [mapsUrl, setMapsUrl] = useState("");
+  const [resolving, setResolving] = useState(false);
   const [form, setForm] = useState({
     name: "",
     location: "",
@@ -25,6 +45,44 @@ const SuggestSpotForm = ({ onClose, onSubmitted }: SuggestSpotFormProps) => {
     wave_type: "beach_break",
     difficulty: "intermediate",
   });
+
+  const applyCoords = (lat: number, lng: number, name?: string | null) => {
+    setForm((f) => ({
+      ...f,
+      lat: lat.toFixed(6),
+      lng: lng.toFixed(6),
+      name: f.name || (name ?? ""),
+    }));
+  };
+
+  const handleResolveMapsUrl = async () => {
+    const url = mapsUrl.trim();
+    if (!url) {
+      toast.error("Pega un enlace de Google Maps");
+      return;
+    }
+
+    const local = parseCoordsFromUrl(url);
+    if (local) {
+      applyCoords(local.lat, local.lng);
+      toast.success("📍 Coordenadas extraídas del enlace");
+      return;
+    }
+
+    setResolving(true);
+    const { data, error } = await supabase.functions.invoke("resolve-maps-link", {
+      body: { url },
+    });
+    setResolving(false);
+
+    if (error || !data || data.error || typeof data.lat !== "number") {
+      toast.error(data?.error || "No se pudieron extraer coordenadas de ese enlace");
+      return;
+    }
+
+    applyCoords(data.lat, data.lng, data.name);
+    toast.success("📍 Ubicación importada de Google Maps");
+  };
 
   const handleGetLocation = () => {
     if ("geolocation" in navigator) {
@@ -41,6 +99,7 @@ const SuggestSpotForm = ({ onClose, onSubmitted }: SuggestSpotFormProps) => {
       );
     }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
